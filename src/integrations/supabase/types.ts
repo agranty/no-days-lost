@@ -278,6 +278,39 @@ export type Database = {
           },
         ]
       }
+      profiles: {
+        Row: {
+          created_at: string
+          current_period_end: string | null
+          email: string
+          id: string
+          plan: string
+          stripe_customer_id: string | null
+          subscription_status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          current_period_end?: string | null
+          email: string
+          id: string
+          plan?: string
+          stripe_customer_id?: string | null
+          subscription_status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          current_period_end?: string | null
+          email?: string
+          id?: string
+          plan?: string
+          stripe_customer_id?: string | null
+          subscription_status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_preferences: {
         Row: {
           created_at: string | null
