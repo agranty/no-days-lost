@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import LogWorkout from "./pages/LogWorkout";
 import History from "./pages/History";
+import Weight from "./pages/Weight";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="/log" element={<LogWorkout />} />
               <Route path="/history" element={<History />} />
+              <Route path="/weight" element={<Weight />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

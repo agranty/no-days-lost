@@ -23,8 +23,6 @@ const navigation = [
   { name: 'Log', href: '/log', icon: Plus },
   { name: 'History', href: '/history', icon: History },
   { name: 'Progress', href: '/progress', icon: TrendingUp },
-  { name: 'Exercises', href: '/exercises', icon: Settings },
-  { name: 'Machines', href: '/machines', icon: Settings },
   { name: 'Weight', href: '/weight', icon: Weight },
   { name: 'Export', href: '/export', icon: Download },
 ];

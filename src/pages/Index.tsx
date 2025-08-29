@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { Dumbbell, Plus, History, TrendingUp, Weight } from 'lucide-react';
+import RecentWorkouts from '@/components/RecentWorkouts';
+import WeightTracker from '@/components/WeightTracker';
 
 const Index = () => {
   const { user, loading } = useAuth();
@@ -108,6 +110,11 @@ const Index = () => {
           </div>
         </CardContent>
       </Card>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <RecentWorkouts />
+        <WeightTracker />
+      </div>
     </div>
   );
 };
