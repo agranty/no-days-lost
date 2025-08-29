@@ -1,15 +1,28 @@
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Trash2, Save } from 'lucide-react';
+import { Save } from 'lucide-react';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import WorkoutHeader from '@/components/workout/WorkoutHeader';
+import ExerciseSelector from '@/components/workout/ExerciseSelector';
+import DraggableExerciseCard from '@/components/workout/DraggableExerciseCard';
+import SessionNotes from '@/components/workout/SessionNotes';
 
 interface Exercise {
   id: string;
@@ -17,6 +30,11 @@ interface Exercise {
   category: string;
   primary_body_part_id: string;
   is_machine_based: boolean;
+}
+
+interface BodyPart {
+  id: string;
+  name: string;
 }
 
 interface WorkoutSet {
@@ -45,14 +63,28 @@ export default function LogWorkout() {
   const { user } = useAuth();
   const { toast } = useToast();
   const [exercises, setExercises] = useState<Exercise[]>([]);
+  const [bodyParts, setBodyParts] = useState<BodyPart[]>([]);
   const [workoutExercises, setWorkoutExercises] = useState<WorkoutExercise[]>([]);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [notes, setNotes] = useState('');
   const [perceivedExertion, setPerceivedExertion] = useState<number>(5);
   const [loading, setLoading] = useState(false);
+  
+  // New state for workout details
+  const [workoutDate, setWorkoutDate] = useState<Date>(new Date());
+  const [workoutType, setWorkoutType] = useState<string>('');
+  const [selectedBodyParts, setSelectedBodyParts] = useState<string[]>([]);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   useEffect(() => {
     loadExercises();
+    loadBodyParts();
     createNewSession();
   }, []);
 
@@ -73,6 +105,23 @@ export default function LogWorkout() {
     }
   };
 
+  const loadBodyParts = async () => {
+    const { data, error } = await supabase
+      .from('body_parts')
+      .select('*')
+      .order('name');
+
+    if (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Error loading body parts',
+        description: error.message,
+      });
+    } else {
+      setBodyParts(data || []);
+    }
+  };
+
   const createNewSession = async () => {
     if (!user) return;
 
@@ -80,7 +129,7 @@ export default function LogWorkout() {
       .from('workout_sessions')
       .insert({
         user_id: user.id,
-        date: new Date().toISOString().split('T')[0],
+        date: workoutDate.toISOString().split('T')[0],
       })
       .select()
       .single();
@@ -157,6 +206,34 @@ export default function LogWorkout() {
     setWorkoutExercises(updatedExercises);
   };
 
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (active.id !== over?.id) {
+      setWorkoutExercises((exercises) => {
+        const activeIndex = exercises.findIndex((_, index) => `exercise-${index}` === active.id);
+        const overIndex = exercises.findIndex((_, index) => `exercise-${index}` === over?.id);
+
+        const reorderedExercises = arrayMove(exercises, activeIndex, overIndex);
+        
+        // Update sort_index to match new order
+        return reorderedExercises.map((exercise, index) => ({
+          ...exercise,
+          sort_index: index,
+        }));
+      });
+    }
+  };
+
+  // Filter exercises based on selected body parts and workout type
+  const filteredExercises = exercises.filter(exercise => {
+    const matchesBodyPart = selectedBodyParts.length === 0 || 
+      selectedBodyParts.includes(exercise.primary_body_part_id);
+    const matchesWorkoutType = workoutType === '' || workoutType === 'mixed' || 
+      exercise.category === workoutType;
+    return matchesBodyPart && matchesWorkoutType;
+  });
+
   const saveWorkout = async () => {
     if (!sessionId || !user) return;
 
@@ -170,6 +247,7 @@ export default function LogWorkout() {
           notes,
           perceived_exertion: perceivedExertion,
           end_time: new Date().toTimeString().split(' ')[0],
+          date: workoutDate.toISOString().split('T')[0],
         })
         .eq('id', sessionId);
 
@@ -225,6 +303,9 @@ export default function LogWorkout() {
       setWorkoutExercises([]);
       setNotes('');
       setPerceivedExertion(5);
+      setWorkoutDate(new Date());
+      setWorkoutType('');
+      setSelectedBodyParts([]);
       createNewSession();
 
     } catch (error: any) {
@@ -248,216 +329,54 @@ export default function LogWorkout() {
         </Button>
       </div>
 
-      {/* Exercise Selector */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Add Exercise</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Select onValueChange={addExercise}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select an exercise..." />
-            </SelectTrigger>
-            <SelectContent>
-              {exercises.map((exercise) => (
-                <SelectItem key={exercise.id} value={exercise.id}>
-                  {exercise.name} 
-                  <Badge variant="secondary" className="ml-2">
-                    {exercise.category}
-                  </Badge>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </CardContent>
-      </Card>
+      {/* Workout Header with Date, Type, and Body Parts */}
+      <WorkoutHeader
+        date={workoutDate}
+        onDateChange={(date) => date && setWorkoutDate(date)}
+        workoutType={workoutType}
+        onWorkoutTypeChange={setWorkoutType}
+        selectedBodyParts={selectedBodyParts}
+        onBodyPartsChange={setSelectedBodyParts}
+        bodyParts={bodyParts}
+      />
 
-      {/* Workout Exercises */}
-      {workoutExercises.map((workoutExercise, exerciseIndex) => (
-        <Card key={exerciseIndex}>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2">
-                {workoutExercise.exercise?.name}
-                <Badge variant="outline">
-                  {workoutExercise.exercise?.category}
-                </Badge>
-              </CardTitle>
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={() => removeExercise(exerciseIndex)}
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {/* Sets Table */}
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b">
-                      <th className="text-left p-2">Set</th>
-                      {workoutExercise.exercise?.category === 'strength' ? (
-                        <>
-                          <th className="text-left p-2">Weight</th>
-                          <th className="text-left p-2">Reps</th>
-                          <th className="text-left p-2">RIR</th>
-                          <th className="text-left p-2">Tempo</th>
-                          {workoutExercise.exercise?.is_machine_based && (
-                            <th className="text-left p-2">Machine Setting</th>
-                          )}
-                        </>
-                      ) : (
-                        <>
-                          <th className="text-left p-2">Distance (m)</th>
-                          <th className="text-left p-2">Duration (sec)</th>
-                          <th className="text-left p-2">Avg HR</th>
-                        </>
-                      )}
-                      <th className="text-left p-2">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {workoutExercise.sets.map((set, setIndex) => (
-                      <tr key={setIndex} className="border-b">
-                        <td className="p-2">{set.set_index}</td>
-                        {workoutExercise.exercise?.category === 'strength' ? (
-                          <>
-                            <td className="p-2">
-                              <Input
-                                type="number"
-                                step="0.1"
-                                value={set.weight || ''}
-                                onChange={(e) => updateSet(exerciseIndex, setIndex, 'weight', parseFloat(e.target.value) || undefined)}
-                                className="w-20"
-                              />
-                            </td>
-                            <td className="p-2">
-                              <Input
-                                type="number"
-                                value={set.reps || ''}
-                                onChange={(e) => updateSet(exerciseIndex, setIndex, 'reps', parseInt(e.target.value) || undefined)}
-                                className="w-20"
-                              />
-                            </td>
-                            <td className="p-2">
-                              <Input
-                                type="number"
-                                value={set.rir || ''}
-                                onChange={(e) => updateSet(exerciseIndex, setIndex, 'rir', parseInt(e.target.value) || undefined)}
-                                className="w-20"
-                              />
-                            </td>
-                            <td className="p-2">
-                              <Input
-                                value={set.tempo || ''}
-                                onChange={(e) => updateSet(exerciseIndex, setIndex, 'tempo', e.target.value)}
-                                className="w-24"
-                                placeholder="3-1-2-0"
-                              />
-                            </td>
-                            {workoutExercise.exercise?.is_machine_based && (
-                              <td className="p-2">
-                                <Input
-                                  value={set.machine_setting || ''}
-                                  onChange={(e) => updateSet(exerciseIndex, setIndex, 'machine_setting', e.target.value)}
-                                  className="w-24"
-                                />
-                              </td>
-                            )}
-                          </>
-                        ) : (
-                          <>
-                            <td className="p-2">
-                              <Input
-                                type="number"
-                                step="0.1"
-                                value={set.distance_m || ''}
-                                onChange={(e) => updateSet(exerciseIndex, setIndex, 'distance_m', parseFloat(e.target.value) || undefined)}
-                                className="w-24"
-                              />
-                            </td>
-                            <td className="p-2">
-                              <Input
-                                type="number"
-                                value={set.duration_sec || ''}
-                                onChange={(e) => updateSet(exerciseIndex, setIndex, 'duration_sec', parseInt(e.target.value) || undefined)}
-                                className="w-24"
-                              />
-                            </td>
-                            <td className="p-2">
-                              <Input
-                                type="number"
-                                value={set.avg_hr_bpm || ''}
-                                onChange={(e) => updateSet(exerciseIndex, setIndex, 'avg_hr_bpm', parseInt(e.target.value) || undefined)}
-                                className="w-20"
-                              />
-                            </td>
-                          </>
-                        )}
-                        <td className="p-2">
-                          <Button
-                            variant="destructive"
-                            size="sm"
-                            onClick={() => removeSet(exerciseIndex, setIndex)}
-                          >
-                            <Trash2 className="h-3 w-3" />
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              
-              <Button onClick={() => addSet(exerciseIndex)} variant="outline" size="sm">
-                <Plus className="mr-2 h-4 w-4" />
-                Add Set
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
+      {/* Exercise Selector - now filtered */}
+      <ExerciseSelector
+        exercises={filteredExercises}
+        onSelectExercise={addExercise}
+      />
+
+      {/* Draggable Workout Exercises */}
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext
+          items={workoutExercises.map((_, index) => `exercise-${index}`)}
+          strategy={verticalListSortingStrategy}
+        >
+          {workoutExercises.map((workoutExercise, exerciseIndex) => (
+            <DraggableExerciseCard
+              key={exerciseIndex}
+              workoutExercise={workoutExercise}
+              exerciseIndex={exerciseIndex}
+              onRemoveExercise={removeExercise}
+              onAddSet={addSet}
+              onRemoveSet={removeSet}
+              onUpdateSet={updateSet}
+            />
+          ))}
+        </SortableContext>
+      </DndContext>
 
       {/* Session Notes */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Session Notes</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <Label htmlFor="perceived-exertion">Perceived Exertion (1-10)</Label>
-            <Select
-              value={perceivedExertion.toString()}
-              onValueChange={(value) => setPerceivedExertion(parseInt(value))}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-                  <SelectItem key={num} value={num.toString()}>
-                    {num}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div>
-            <Label htmlFor="notes">Notes</Label>
-            <Textarea
-              id="notes"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              placeholder="How did the workout feel? Any observations..."
-            />
-          </div>
-        </CardContent>
-      </Card>
+      <SessionNotes
+        notes={notes}
+        onNotesChange={setNotes}
+        perceivedExertion={perceivedExertion}
+        onPerceivedExertionChange={setPerceivedExertion}
+      />
     </div>
   );
 }
