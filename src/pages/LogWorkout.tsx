@@ -43,8 +43,8 @@ interface WorkoutSet {
   weight?: number;
   unit?: string;
   reps?: number;
-  rir?: number;
-  tempo?: string;
+  rpe?: number;
+  rest_sec?: number;
   machine_setting?: string;
   distance_m?: number;
   duration_sec?: number;
@@ -164,8 +164,8 @@ export default function LogWorkout() {
     weight: undefined,
     unit: 'kg',
     reps: undefined,
-    rir: undefined,
-    tempo: '',
+    rpe: undefined,
+    rest_sec: undefined,
     machine_setting: '',
     distance_m: undefined,
     duration_sec: undefined,
@@ -273,8 +273,8 @@ export default function LogWorkout() {
             weight: set.weight || null,
             unit: set.unit as 'kg' | 'lb' | null,
             reps: set.reps || null,
-            rir: set.rir || null,
-            tempo: set.tempo || null,
+            rpe: set.rpe || null,
+            rest_sec: set.rest_sec || null,
             machine_setting: set.machine_setting || null,
             distance_m: set.distance_m || null,
             duration_sec: set.duration_sec || null,

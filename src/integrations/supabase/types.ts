@@ -393,9 +393,9 @@ export type Database = {
           pace_sec_per_km: number | null
           pace_sec_per_mile: number | null
           reps: number | null
-          rir: number | null
+          rest_sec: number | null
+          rpe: number | null
           set_index: number
-          tempo: string | null
           unit: Database["public"]["Enums"]["unit_type"] | null
           weight: number | null
           workout_exercise_id: string
@@ -412,9 +412,9 @@ export type Database = {
           pace_sec_per_km?: number | null
           pace_sec_per_mile?: number | null
           reps?: number | null
-          rir?: number | null
+          rest_sec?: number | null
+          rpe?: number | null
           set_index?: number
-          tempo?: string | null
           unit?: Database["public"]["Enums"]["unit_type"] | null
           weight?: number | null
           workout_exercise_id: string
@@ -431,9 +431,9 @@ export type Database = {
           pace_sec_per_km?: number | null
           pace_sec_per_mile?: number | null
           reps?: number | null
-          rir?: number | null
+          rest_sec?: number | null
+          rpe?: number | null
           set_index?: number
-          tempo?: string | null
           unit?: Database["public"]["Enums"]["unit_type"] | null
           weight?: number | null
           workout_exercise_id?: string
