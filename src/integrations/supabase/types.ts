@@ -135,9 +135,11 @@ export type Database = {
         Row: {
           category: Database["public"]["Enums"]["exercise_category"]
           created_at: string | null
+          created_by_user_id: string | null
           default_unit: Database["public"]["Enums"]["unit_type"] | null
           id: string
           is_machine_based: boolean | null
+          is_user_defined: boolean | null
           name: string
           notes: string | null
           primary_body_part_id: string | null
@@ -147,9 +149,11 @@ export type Database = {
         Insert: {
           category: Database["public"]["Enums"]["exercise_category"]
           created_at?: string | null
+          created_by_user_id?: string | null
           default_unit?: Database["public"]["Enums"]["unit_type"] | null
           id?: string
           is_machine_based?: boolean | null
+          is_user_defined?: boolean | null
           name: string
           notes?: string | null
           primary_body_part_id?: string | null
@@ -159,9 +163,11 @@ export type Database = {
         Update: {
           category?: Database["public"]["Enums"]["exercise_category"]
           created_at?: string | null
+          created_by_user_id?: string | null
           default_unit?: Database["public"]["Enums"]["unit_type"] | null
           id?: string
           is_machine_based?: boolean | null
+          is_user_defined?: boolean | null
           name?: string
           notes?: string | null
           primary_body_part_id?: string | null
@@ -345,6 +351,7 @@ export type Database = {
         Row: {
           created_at: string | null
           date: string
+          duration_min: number | null
           end_time: string | null
           id: string
           notes: string | null
@@ -357,6 +364,7 @@ export type Database = {
         Insert: {
           created_at?: string | null
           date?: string
+          duration_min?: number | null
           end_time?: string | null
           id?: string
           notes?: string | null
@@ -369,6 +377,7 @@ export type Database = {
         Update: {
           created_at?: string | null
           date?: string
+          duration_min?: number | null
           end_time?: string | null
           id?: string
           notes?: string | null
@@ -454,6 +463,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      workout_summary: {
+        Row: {
+          created_at: string | null
+          date: string
+          id: string
+          summary_text: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          date: string
+          id?: string
+          summary_text: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          date?: string
+          id?: string
+          summary_text?: string
+          user_id?: string
+        }
+        Relationships: []
       }
     }
     Views: {

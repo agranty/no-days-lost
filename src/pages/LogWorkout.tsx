@@ -23,6 +23,7 @@ import WorkoutHeader from '@/components/workout/WorkoutHeader';
 import ExerciseSelector from '@/components/workout/ExerciseSelector';
 import DraggableExerciseCard from '@/components/workout/DraggableExerciseCard';
 import SessionNotes from '@/components/workout/SessionNotes';
+import WorkoutDuration from '@/components/workout/WorkoutDuration';
 
 interface Exercise {
   id: string;
@@ -74,6 +75,7 @@ export default function LogWorkout() {
   const [workoutDate, setWorkoutDate] = useState<Date>(new Date());
   const [workoutType, setWorkoutType] = useState<string>('');
   const [selectedBodyParts, setSelectedBodyParts] = useState<string[]>([]);
+  const [workoutDuration, setWorkoutDuration] = useState<number | undefined>(undefined);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -248,6 +250,7 @@ export default function LogWorkout() {
           perceived_exertion: perceivedExertion,
           end_time: new Date().toTimeString().split(' ')[0],
           date: workoutDate.toISOString().split('T')[0],
+          duration_min: workoutDuration || null,
         })
         .eq('id', sessionId);
 
@@ -306,6 +309,7 @@ export default function LogWorkout() {
       setWorkoutDate(new Date());
       setWorkoutType('');
       setSelectedBodyParts([]);
+      setWorkoutDuration(undefined);
       createNewSession();
 
     } catch (error: any) {
@@ -343,7 +347,10 @@ export default function LogWorkout() {
       {/* Exercise Selector - now filtered */}
       <ExerciseSelector
         exercises={filteredExercises}
+        bodyParts={bodyParts}
+        selectedBodyPart={selectedBodyParts[0]}
         onSelectExercise={addExercise}
+        onExerciseCreated={loadExercises}
       />
 
       {/* Draggable Workout Exercises */}
@@ -369,6 +376,12 @@ export default function LogWorkout() {
           ))}
         </SortableContext>
       </DndContext>
+
+      {/* Workout Duration */}
+      <WorkoutDuration
+        duration={workoutDuration}
+        onDurationChange={setWorkoutDuration}
+      />
 
       {/* Session Notes */}
       <SessionNotes
