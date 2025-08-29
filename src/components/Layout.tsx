@@ -24,7 +24,6 @@ const navigation = [
   { name: 'History', href: '/history', icon: History },
   { name: 'Progress', href: '/progress', icon: TrendingUp },
   { name: 'Weight', href: '/weight', icon: Weight },
-  { name: 'Export', href: '/export', icon: Download },
 ];
 
 export default function Layout({ children }: LayoutProps) {
