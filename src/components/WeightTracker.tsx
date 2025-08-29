@@ -24,8 +24,8 @@ export default function WeightTracker() {
 
     setSaving(true);
     try {
-      // Convert lbs to kg for storage (existing table uses kg)
-      const weightKg = parseFloat(weight) * 0.453592;
+      // Convert lbs to kg for storage, ensuring 1 decimal precision
+      const weightKg = Math.round(parseFloat(weight) * 0.453592 * 10) / 10;
       
       const { error } = await supabase
         .from('body_weight_logs')
@@ -43,7 +43,7 @@ export default function WeightTracker() {
 
       toast({
         title: 'Weight saved successfully',
-        description: `${weight} lbs logged for ${format(date, 'MMM dd, yyyy')}`
+        description: `${parseFloat(weight).toFixed(1)} lbs logged for ${format(date, 'MMM dd, yyyy')}`
       });
 
       setWeight('');

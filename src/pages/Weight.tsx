@@ -1,13 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { CalendarIcon, Weight as WeightIcon, Edit, Save, X } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { format, parseISO } from 'date-fns';
+import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 interface WeightEntry {
+  id: string;
   date: string;
   weight_lbs: number;
+  notes?: string;
   created_at: string;
 }
 
@@ -29,7 +39,20 @@ export default function Weight() {
   const [monthlyStats, setMonthlyStats] = useState<MonthlyStats[]>([]);
   const [chartData, setChartData] = useState<ChartData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  
+  // Quick entry form state
+  const [quickEntryDate, setQuickEntryDate] = useState<Date>(new Date());
+  const [quickEntryWeight, setQuickEntryWeight] = useState('');
+  const [quickEntryNotes, setQuickEntryNotes] = useState('');
+  
+  // Edit form state
+  const [editWeight, setEditWeight] = useState('');
+  const [editNotes, setEditNotes] = useState('');
+  
   const { user } = useAuth();
+  const { toast } = useToast();
 
   useEffect(() => {
     if (user) {
@@ -41,7 +64,7 @@ export default function Weight() {
     try {
       const { data, error } = await supabase
         .from('body_weight_logs')
-        .select('date, body_weight, created_at')
+        .select('id, date, body_weight, notes, created_at')
         .eq('user_id', user!.id)
         .order('date', { ascending: true });
 
@@ -59,8 +82,10 @@ export default function Weight() {
         
         if (!existing || new Date(entry.created_at) > new Date(existing.created_at)) {
           weightMap.set(entry.date, {
+            id: entry.id,
             date: entry.date,
-            weight_lbs: weightLbs,
+            weight_lbs: Math.round(weightLbs * 10) / 10, // Ensure 1 decimal precision
+            notes: entry.notes,
             created_at: entry.created_at
           });
         }
@@ -106,6 +131,108 @@ export default function Weight() {
     }
   };
 
+  const handleQuickSave = async () => {
+    if (!quickEntryWeight || !user) return;
+
+    setSaving(true);
+    try {
+      // Convert lbs to kg for storage, ensuring 1 decimal precision
+      const weightKg = Math.round(parseFloat(quickEntryWeight) * 0.453592 * 10) / 10;
+      
+      const { error } = await supabase
+        .from('body_weight_logs')
+        .insert({
+          user_id: user.id,
+          date: format(quickEntryDate, 'yyyy-MM-dd'),
+          body_weight: weightKg,
+          unit: 'kg',
+          notes: quickEntryNotes || null
+        });
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: 'Weight saved successfully',
+        description: `${parseFloat(quickEntryWeight).toFixed(1)} lbs logged for ${format(quickEntryDate, 'MMM dd, yyyy')}`
+      });
+
+      // Reset form
+      setQuickEntryWeight('');
+      setQuickEntryNotes('');
+      setQuickEntryDate(new Date());
+      
+      // Reload data
+      loadWeightData();
+    } catch (error) {
+      console.error('Error saving weight:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to save weight. Please try again.',
+        variant: 'destructive'
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const startEdit = (entry: WeightEntry) => {
+    setEditingId(entry.id);
+    setEditWeight(entry.weight_lbs.toFixed(1));
+    setEditNotes(entry.notes || '');
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditWeight('');
+    setEditNotes('');
+  };
+
+  const saveEdit = async (id: string) => {
+    if (!editWeight || !user) return;
+
+    setSaving(true);
+    try {
+      // Convert lbs to kg for storage, ensuring 1 decimal precision
+      const weightKg = Math.round(parseFloat(editWeight) * 0.453592 * 10) / 10;
+      
+      const { error } = await supabase
+        .from('body_weight_logs')
+        .update({
+          body_weight: weightKg,
+          notes: editNotes || null
+        })
+        .eq('id', id)
+        .eq('user_id', user.id);
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: 'Weight updated successfully',
+        description: `Weight updated to ${parseFloat(editWeight).toFixed(1)} lbs`
+      });
+
+      setEditingId(null);
+      setEditWeight('');
+      setEditNotes('');
+      
+      // Reload data
+      loadWeightData();
+    } catch (error) {
+      console.error('Error updating weight:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to update weight. Please try again.',
+        variant: 'destructive'
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="space-y-6">
@@ -133,6 +260,76 @@ export default function Weight() {
     <div className="space-y-6">
       <h1 className="text-3xl font-bold">Weight Tracking</h1>
 
+      {/* Quick Entry Form */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <WeightIcon className="h-5 w-5" />
+            Log Body Weight
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="space-y-2">
+              <Label>Date</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "w-full justify-start text-left font-normal",
+                      !quickEntryDate && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {quickEntryDate ? format(quickEntryDate, "PPP") : <span>Pick a date</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={quickEntryDate}
+                    onSelect={(newDate) => newDate && setQuickEntryDate(newDate)}
+                    initialFocus
+                    className={cn("p-3 pointer-events-auto")}
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="quick-weight">Weight (lbs)</Label>
+              <Input
+                id="quick-weight"
+                type="number"
+                step="0.1"
+                placeholder="e.g., 180.5"
+                value={quickEntryWeight}
+                onChange={(e) => setQuickEntryWeight(e.target.value)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="quick-notes">Notes (optional)</Label>
+              <Input
+                id="quick-notes"
+                placeholder="e.g., morning weight"
+                value={quickEntryNotes}
+                onChange={(e) => setQuickEntryNotes(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <Button 
+            onClick={handleQuickSave} 
+            disabled={!quickEntryWeight || saving}
+            className="w-full"
+          >
+            {saving ? 'Saving...' : 'Save Weight'}
+          </Button>
+        </CardContent>
+      </Card>
+
       {/* Monthly Summary Table */}
       <Card>
         <CardHeader>
@@ -153,9 +350,9 @@ export default function Weight() {
                 {monthlyStats.map((stat) => (
                   <tr key={stat.month} className="border-b">
                     <td className="p-2">{stat.month}</td>
-                    <td className="text-right p-2">{stat.avg}</td>
-                    <td className="text-right p-2">{stat.min}</td>
-                    <td className="text-right p-2">{stat.max}</td>
+                    <td className="text-right p-2">{stat.avg.toFixed(1)}</td>
+                    <td className="text-right p-2">{stat.min.toFixed(1)}</td>
+                    <td className="text-right p-2">{stat.max.toFixed(1)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -190,7 +387,7 @@ export default function Weight() {
                     }
                     return label;
                   }}
-                  formatter={(value) => [`${value} lbs`, 'Weight']}
+                  formatter={(value) => [`${Number(value).toFixed(1)} lbs`, 'Weight']}
                 />
                 <Line 
                   type="monotone" 
@@ -203,6 +400,88 @@ export default function Weight() {
               </LineChart>
             </ResponsiveContainer>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Weight History */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Weight History</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {weightEntries.length === 0 ? (
+            <p className="text-center text-muted-foreground py-4">No weight entries yet</p>
+          ) : (
+            <div className="space-y-2">
+              {weightEntries.slice().reverse().map((entry) => (
+                <div key={entry.id} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div className="flex-1">
+                    <div className="font-medium">
+                      {format(parseISO(entry.date), 'MMM dd, yyyy')}
+                    </div>
+                    {editingId === entry.id ? (
+                      <div className="mt-2 space-y-2">
+                        <div className="flex gap-2">
+                          <Input
+                            type="number"
+                            step="0.1"
+                            value={editWeight}
+                            onChange={(e) => setEditWeight(e.target.value)}
+                            placeholder="Weight (lbs)"
+                            className="w-32"
+                          />
+                          <span className="self-center text-sm text-muted-foreground">lbs</span>
+                        </div>
+                        <Input
+                          value={editNotes}
+                          onChange={(e) => setEditNotes(e.target.value)}
+                          placeholder="Notes (optional)"
+                        />
+                      </div>
+                    ) : (
+                      <div className="text-lg font-semibold text-primary">
+                        {entry.weight_lbs.toFixed(1)} lbs
+                      </div>
+                    )}
+                    {entry.notes && editingId !== entry.id && (
+                      <div className="text-sm text-muted-foreground mt-1">
+                        {entry.notes}
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex gap-2">
+                    {editingId === entry.id ? (
+                      <>
+                        <Button
+                          size="sm"
+                          onClick={() => saveEdit(entry.id)}
+                          disabled={saving || !editWeight}
+                        >
+                          <Save className="h-4 w-4" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={cancelEdit}
+                          disabled={saving}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </>
+                    ) : (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => startEdit(entry)}
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

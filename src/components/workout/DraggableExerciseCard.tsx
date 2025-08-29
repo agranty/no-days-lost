@@ -186,7 +186,15 @@ export default function DraggableExerciseCard({
                             type="number"
                             step="0.1"
                             value={set.weight || ''}
-                            onChange={(e) => onUpdateSet(exerciseIndex, setIndex, 'weight', parseFloat(e.target.value) || undefined)}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              if (value === '') {
+                                onUpdateSet(exerciseIndex, setIndex, 'weight', undefined);
+                              } else {
+                                const weight = Math.round(parseFloat(value) * 10) / 10;
+                                onUpdateSet(exerciseIndex, setIndex, 'weight', weight);
+                              }
+                            }}
                             className="w-20"
                           />
                         </td>
@@ -338,7 +346,7 @@ export default function DraggableExerciseCard({
               <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded">
                 <span className="font-medium">{summary.totalSets} sets</span>
                 {summary.topSet && (
-                  <span>, Top set {summary.topSet.weight}×{summary.topSet.reps}</span>
+                  <span>, Top set {summary.topSet.weight?.toFixed(1)}×{summary.topSet.reps}</span>
                 )}
                 {summary.totalVolume > 0 && (
                   <span>, Total volume {summary.totalVolume.toLocaleString()} {summary.topSet?.unit || 'kg'}</span>
@@ -350,7 +358,7 @@ export default function DraggableExerciseCard({
                   <span>, Avg Rest {Math.round(summary.avgRest)}s</span>
                 )}
                 {summary.bestOneRM && (
-                  <span>, Best est. 1RM {Math.round(summary.bestOneRM)} {summary.topSet?.unit || 'kg'}</span>
+                  <span>, Best est. 1RM {summary.bestOneRM.toFixed(1)} {summary.topSet?.unit || 'kg'}</span>
                 )}
               </div>
             );
