@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useResponsiveText } from '@/lib/responsive-utils';
 import { Clock } from 'lucide-react';
 
 interface WorkoutDurationProps {
@@ -9,6 +10,8 @@ interface WorkoutDurationProps {
 }
 
 export default function WorkoutDuration({ duration, onDurationChange }: WorkoutDurationProps) {
+  const responsiveText = useResponsiveText();
+  
   const handleDurationChange = (value: string) => {
     const numValue = value === '' ? undefined : parseInt(value, 10);
     if (numValue === undefined || (numValue >= 0 && numValue <= 999)) {
@@ -21,7 +24,7 @@ export default function WorkoutDuration({ duration, onDurationChange }: WorkoutD
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Clock className="h-4 w-4" />
-          Workout Duration
+          {responsiveText.workoutDuration}
         </CardTitle>
       </CardHeader>
       <CardContent>

@@ -2,12 +2,14 @@ import { Navigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
+import { useResponsiveText } from '@/lib/responsive-utils';
 import { Dumbbell, Plus, History, TrendingUp, Weight } from 'lucide-react';
 import RecentWorkouts from '@/components/RecentWorkouts';
 import WeightTracker from '@/components/WeightTracker';
 
 const Index = () => {
   const { user, loading } = useAuth();
+  const responsiveText = useResponsiveText();
 
   if (loading) {
     return (
@@ -35,7 +37,7 @@ const Index = () => {
         <Card className="hover:shadow-lg transition-shadow cursor-pointer">
           <CardHeader className="text-center">
             <Plus className="h-12 w-12 mx-auto text-primary mb-2" />
-            <CardTitle>Log Workout</CardTitle>
+            <CardTitle>{responsiveText.workoutLog}</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground mb-4">Start tracking your training session</p>
@@ -74,7 +76,7 @@ const Index = () => {
         <Card className="hover:shadow-lg transition-shadow cursor-pointer">
           <CardHeader className="text-center">
             <Weight className="h-12 w-12 mx-auto text-primary mb-2" />
-            <CardTitle>Body Weight</CardTitle>
+            <CardTitle>{responsiveText.bodyWeight}</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground mb-4">Log your body weight</p>
@@ -101,7 +103,7 @@ const Index = () => {
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-primary">0</div>
-              <div className="text-sm text-muted-foreground">PRs Set</div>
+              <div className="text-sm text-muted-foreground">{responsiveText.personalRecord}s Set</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-primary">-</div>

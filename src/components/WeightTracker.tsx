@@ -9,6 +9,7 @@ import { CalendarIcon, Weight } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { format } from 'date-fns';
+import { useResponsiveText, useResponsiveDate } from '@/lib/responsive-utils';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 
@@ -18,6 +19,8 @@ export default function WeightTracker() {
   const [saving, setSaving] = useState(false);
   const { user } = useAuth();
   const { toast } = useToast();
+  const responsiveText = useResponsiveText();
+  const { formatDate } = useResponsiveDate();
 
   const handleSave = async () => {
     if (!weight || !user) return;
@@ -43,7 +46,7 @@ export default function WeightTracker() {
 
       toast({
         title: 'Weight saved successfully',
-        description: `${parseFloat(weight).toFixed(1)} lbs logged for ${format(date, 'MMM dd, yyyy')}`
+        description: `${parseFloat(weight).toFixed(1)} lbs logged for ${formatDate(date)}`
       });
 
       setWeight('');
@@ -64,7 +67,7 @@ export default function WeightTracker() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Weight className="h-5 w-5" />
-          Log Body Weight
+          Log {responsiveText.bodyWeight}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -81,7 +84,7 @@ export default function WeightTracker() {
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date ? format(date, "PPP") : <span>Pick a date</span>}
+                  {date ? formatDate(date) : <span>Pick a date</span>}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">

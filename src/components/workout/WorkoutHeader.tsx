@@ -7,6 +7,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useResponsiveDate } from '@/lib/responsive-utils';
 import { cn } from '@/lib/utils';
 
 interface BodyPart {
@@ -33,6 +34,8 @@ export default function WorkoutHeader({
   onBodyPartsChange,
   bodyParts,
 }: WorkoutHeaderProps) {
+  const { formatDate } = useResponsiveDate();
+  
   const toggleBodyPart = (bodyPartId: string) => {
     if (selectedBodyParts.includes(bodyPartId)) {
       onBodyPartsChange(selectedBodyParts.filter(id => id !== bodyPartId));
@@ -60,7 +63,7 @@ export default function WorkoutHeader({
                 )}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? format(date, "PPP") : <span>Pick a date</span>}
+                {date ? formatDate(date) : <span>Pick a date</span>}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">

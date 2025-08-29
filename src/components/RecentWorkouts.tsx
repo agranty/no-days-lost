@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { useResponsiveDate } from '@/lib/responsive-utils';
 import { format } from 'date-fns';
 
 interface RecentWorkout {
@@ -19,6 +20,7 @@ export default function RecentWorkouts() {
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { formatDateShort } = useResponsiveDate();
 
   useEffect(() => {
     if (user) {
@@ -136,7 +138,7 @@ export default function RecentWorkouts() {
             >
               <div className="flex items-center space-x-4 flex-1">
                 <div className="text-sm font-medium">
-                  {format(new Date(workout.date), 'MMM dd')}
+                  {formatDateShort(new Date(workout.date))}
                 </div>
                 <div className="text-sm text-muted-foreground max-w-[150px] truncate">
                   {workout.workout_type}

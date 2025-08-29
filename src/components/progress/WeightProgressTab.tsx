@@ -7,6 +7,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import { Weight, TrendingUp } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
+import { useResponsiveText, useResponsiveDate } from '@/lib/responsive-utils';
 import { format, parseISO, subDays } from 'date-fns';
 
 interface WeightDataPoint {
@@ -29,6 +30,8 @@ export default function WeightProgressTab() {
   const [showStrengthOverlay, setShowStrengthOverlay] = useState(false);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const responsiveText = useResponsiveText();
+  const { formatDate, formatDateShort } = useResponsiveDate();
 
   useEffect(() => {
     if (user) {
@@ -207,10 +210,10 @@ export default function WeightProgressTab() {
       {/* Weight Progress Chart */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <TrendingUp className="h-5 w-5" />
-            Body Weight Progress
-          </CardTitle>
+        <CardTitle className="flex items-center gap-2">
+          <TrendingUp className="h-5 w-5" />
+          {responsiveText.bodyWeight} Progress
+        </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="h-80">
@@ -219,7 +222,7 @@ export default function WeightProgressTab() {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis 
                   dataKey="date"
-                  tickFormatter={(date) => format(parseISO(date), 'MMM dd')}
+                  tickFormatter={(date) => formatDateShort(parseISO(date))}
                 />
                 <YAxis 
                   yAxisId="weight"
@@ -233,7 +236,7 @@ export default function WeightProgressTab() {
                   />
                 )}
                 <Tooltip 
-                  labelFormatter={(date) => format(parseISO(date), 'MMM dd, yyyy')}
+                  labelFormatter={(date) => formatDate(parseISO(date))}
                   formatter={(value, name) => {
                     if (name === 'weight') return [`${Number(value).toFixed(1)} lbs`, 'Weight'];
                     if (name === 'rollingAverage') return [`${Number(value).toFixed(1)} lbs`, '7-day Average'];
@@ -295,7 +298,7 @@ export default function WeightProgressTab() {
                 <div key={entry.id} className="flex items-center justify-between p-3 border rounded-lg">
                   <div>
                     <div className="font-medium">
-                      {format(parseISO(entry.date), 'MMM dd, yyyy')}
+                      {formatDate(parseISO(entry.date))}
                     </div>
                     <div className="text-lg font-semibold text-primary">
                       {entry.weight_lbs.toFixed(1)} lbs

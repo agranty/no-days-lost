@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useResponsiveText } from '@/lib/responsive-utils';
 import { Trash2, Plus, GripVertical } from 'lucide-react';
 
 // Helper function to calculate exercise summary
@@ -94,6 +95,8 @@ export default function DraggableExerciseCard({
   onRemoveSet,
   onUpdateSet,
 }: DraggableExerciseCardProps) {
+  const responsiveText = useResponsiveText();
+  
   const {
     attributes,
     listeners,
@@ -153,7 +156,7 @@ export default function DraggableExerciseCard({
                     <>
                       <th className="text-left p-2">Weight</th>
                       <th className="text-left p-2">Unit</th>
-                      <th className="text-left p-2">Reps</th>
+                      <th className="text-left p-2">{responsiveText.repetitions}</th>
                       <th className="text-left p-2">RPE</th>
                       <th className="text-left p-2">Rest (sec)</th>
                       {workoutExercise.exercise?.is_machine_based && (
@@ -358,7 +361,7 @@ export default function DraggableExerciseCard({
                   <span>, Avg Rest {Math.round(summary.avgRest)}s</span>
                 )}
                 {summary.bestOneRM && (
-                  <span>, Best est. 1RM {summary.bestOneRM.toFixed(1)} {summary.topSet?.unit || 'kg'}</span>
+                  <span>, Best est. {responsiveText.estimatedOneRepMax} {summary.bestOneRM.toFixed(1)} {summary.topSet?.unit || 'kg'}</span>
                 )}
               </div>
             );

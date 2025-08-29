@@ -263,10 +263,10 @@ export default function Weight() {
       {/* Quick Entry Form */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <WeightIcon className="h-5 w-5" />
-            Log Body Weight
-          </CardTitle>
+        <CardTitle className="flex items-center gap-2">
+          <WeightIcon className="h-5 w-5" />
+          Log Body Weight
+        </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
+import { useResponsiveText } from '@/lib/responsive-utils';
 import { 
   Dumbbell, 
   Plus, 
@@ -20,7 +21,7 @@ interface LayoutProps {
 }
 
 const navigation = [
-  { name: 'Log', href: '/log', icon: Plus },
+  { name: 'workoutLog', href: '/log', icon: Plus },
   { name: 'History', href: '/history', icon: History },
   { name: 'Progress', href: '/progress', icon: TrendingUp },
   { name: 'Weight', href: '/weight', icon: Weight },
@@ -29,6 +30,7 @@ const navigation = [
 export default function Layout({ children }: LayoutProps) {
   const { user, signOut } = useAuth();
   const location = useLocation();
+  const responsiveText = useResponsiveText();
 
   if (!user) {
     return <>{children}</>;
@@ -48,6 +50,7 @@ export default function Layout({ children }: LayoutProps) {
             {navigation.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.href;
+              const displayName = item.name === 'workoutLog' ? responsiveText.workoutLog : item.name;
               
               return (
                 <Link
@@ -57,9 +60,11 @@ export default function Layout({ children }: LayoutProps) {
                     'flex items-center space-x-2 transition-colors hover:text-foreground/80',
                     isActive ? 'text-foreground' : 'text-foreground/60'
                   )}
+                  title={item.name === 'workoutLog' ? 'Workout Log' : item.name}
+                  aria-label={item.name === 'workoutLog' ? 'Workout Log' : item.name}
                 >
                   <Icon className="h-4 w-4" />
-                  <span className="hidden sm:inline-block">{item.name}</span>
+                  <span className="hidden sm:inline-block">{displayName}</span>
                 </Link>
               );
             })}
