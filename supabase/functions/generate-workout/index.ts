@@ -112,7 +112,7 @@ serve(async (req) => {
     - For bodyweight exercises like plank, wall sit, use duration_sec field instead of reps
     - For weight/machine exercises, always include weight field (default null)
     - Default weight to null so users can fill in at gym
-    - Use "kg" as default unit
+    - Use "lb" as default unit
 
     Response format MUST be exactly this structure:
     {
@@ -127,7 +127,7 @@ serve(async (req) => {
             "sets": [
               {
                 "weight": null,
-                "unit": "kg", 
+                "unit": "lb", 
                 "reps": number (use for weight/machine exercises),
                 "duration_sec": number (use for bodyweight exercises like plank),
                 "rpe": number,

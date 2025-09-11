@@ -245,7 +245,7 @@ function SortableExercise({ exercise, index, onEdit, onRemove }: {
             onClick={() => {
               const newSet = {
                 weight: null,
-                unit: exercise.sets[0]?.unit || 'kg',
+                unit: exercise.sets[0]?.unit || 'lb',
                 reps: exercise.sets[0]?.duration_sec ? undefined : 10,
                 duration_sec: exercise.sets[0]?.duration_sec ? 30 : undefined,
                 rpe: 7,
