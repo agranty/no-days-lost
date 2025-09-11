@@ -63,22 +63,23 @@ serve(async (req) => {
     }
 
     const url = new URL(req.url);
-    const path = url.pathname.replace('/functions/v1/admin-api', '');
+    const body = await req.json();
+    const { action } = body;
 
-    // Route handling
+    // Route handling based on action in request body
     if (req.method === 'POST') {
-      if (path === '/user/set-role') {
-        return await handleSetRole(req, supabase, user.id);
-      } else if (path === '/user/grant-pro') {
-        return await handleGrantPro(req, supabase, user.id);
-      } else if (path === '/user/downgrade') {
-        return await handleDowngrade(req, supabase, user.id);
+      if (action === 'set-role') {
+        return await handleSetRole(req, supabase, user.id, body);
+      } else if (action === 'grant-pro') {
+        return await handleGrantPro(req, supabase, user.id, body);
+      } else if (action === 'downgrade') {
+        return await handleDowngrade(req, supabase, user.id, body);
       }
     }
 
     return new Response(
-      JSON.stringify({ error: 'Endpoint not found' }),
-      { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      JSON.stringify({ error: 'Invalid action or method' }),
+      { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
   } catch (error) {
@@ -90,9 +91,9 @@ serve(async (req) => {
   }
 });
 
-async function handleSetRole(req: Request, supabase: any, actorUserId: string) {
+async function handleSetRole(req: Request, supabase: any, actorUserId: string, body: any) {
   try {
-    const { userId, role } = await req.json();
+    const { userId, role } = body;
 
     if (!userId || !role || !['user', 'admin'].includes(role)) {
       return new Response(
@@ -145,9 +146,9 @@ async function handleSetRole(req: Request, supabase: any, actorUserId: string) {
   }
 }
 
-async function handleGrantPro(req: Request, supabase: any, actorUserId: string) {
+async function handleGrantPro(req: Request, supabase: any, actorUserId: string, body: any) {
   try {
-    const { userId, months = 12 } = await req.json();
+    const { userId, months = 12 } = body;
 
     if (!userId || months < 1) {
       return new Response(
@@ -201,9 +202,9 @@ async function handleGrantPro(req: Request, supabase: any, actorUserId: string) 
   }
 }
 
-async function handleDowngrade(req: Request, supabase: any, actorUserId: string) {
+async function handleDowngrade(req: Request, supabase: any, actorUserId: string, body: any) {
   try {
-    const { userId } = await req.json();
+    const { userId } = body;
 
     if (!userId) {
       return new Response(

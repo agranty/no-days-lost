@@ -114,10 +114,10 @@ export default function AdminUsers() {
     try {
       const { error } = await supabase.functions.invoke('admin-api', {
         body: {
+          action: 'set-role',
           userId: targetUser.id,
           role: newRole
-        },
-        method: 'POST'
+        }
       });
 
       if (error) throw error;
@@ -140,14 +140,15 @@ export default function AdminUsers() {
 
   const handlePlanChange = async (targetUser: User, newPlan: string) => {
     try {
-      const endpoint = newPlan === 'pro' ? '/user/grant-pro' : '/user/downgrade';
-      const body = newPlan === 'pro' 
-        ? { userId: targetUser.id, months: 12 }
-        : { userId: targetUser.id };
+      const action = newPlan === 'pro' ? 'grant-pro' : 'downgrade';
+      const body = {
+        action,
+        userId: targetUser.id,
+        ...(newPlan === 'pro' ? { months: 12 } : {})
+      };
 
       const { error } = await supabase.functions.invoke('admin-api', {
-        body,
-        method: 'POST'
+        body
       });
 
       if (error) throw error;
