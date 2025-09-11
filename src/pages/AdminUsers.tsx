@@ -231,7 +231,7 @@ export default function AdminUsers() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="outline" size="sm" asChild>
           <Link to="/admin">
@@ -245,9 +245,9 @@ export default function AdminUsers() {
         </div>
       </div>
 
-      <Card>
+      <Card className="shadow-sm border-0">
         <CardHeader>
-          <CardTitle>Filters</CardTitle>
+          <CardTitle>Search & Filter</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col md:flex-row gap-4">
@@ -258,12 +258,12 @@ export default function AdminUsers() {
                   placeholder="Search by email..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-9"
+                  className="pl-9 h-11"
                 />
               </div>
             </div>
             <Select value={roleFilter} onValueChange={setRoleFilter}>
-              <SelectTrigger className="w-[140px]">
+              <SelectTrigger className="w-[140px] h-11">
                 <SelectValue placeholder="Role" />
               </SelectTrigger>
               <SelectContent>
@@ -273,7 +273,7 @@ export default function AdminUsers() {
               </SelectContent>
             </Select>
             <Select value={planFilter} onValueChange={setPlanFilter}>
-              <SelectTrigger className="w-[140px]">
+              <SelectTrigger className="w-[140px] h-11">
                 <SelectValue placeholder="Plan" />
               </SelectTrigger>
               <SelectContent>
@@ -286,7 +286,7 @@ export default function AdminUsers() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="shadow-sm border-0">
         <CardHeader>
           <CardTitle>Users ({filteredUsers.length})</CardTitle>
         </CardHeader>

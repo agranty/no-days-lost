@@ -236,8 +236,16 @@ export default function Weight() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold">Weight Tracking</h1>
-        <div className="text-center py-8">Loading...</div>
+        <div>
+          <h1 className="text-3xl font-bold">Weight Tracking</h1>
+          <p className="text-muted-foreground">Monitor your body weight progress</p>
+        </div>
+        <Card className="p-8">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading your weight data...</p>
+          </div>
+        </Card>
       </div>
     );
   }
@@ -245,12 +253,20 @@ export default function Weight() {
   if (weightEntries.length === 0) {
     return (
       <div className="space-y-6">
-        <h1 className="text-3xl font-bold">Weight Tracking</h1>
-        <Card>
-          <CardContent className="text-center py-8">
-            <p className="text-muted-foreground mb-4">No weight entries found</p>
-            <p className="text-sm text-muted-foreground">Start logging your weight from the home page to see charts and statistics here.</p>
-          </CardContent>
+        <div>
+          <h1 className="text-3xl font-bold">Weight Tracking</h1>
+          <p className="text-muted-foreground">Monitor your body weight progress</p>
+        </div>
+        <Card className="p-8">
+          <div className="text-center space-y-4">
+            <div className="rounded-full bg-muted/50 p-4 w-fit mx-auto">
+              <WeightIcon className="h-12 w-12 text-muted-foreground" />
+            </div>
+            <div>
+              <p className="text-muted-foreground mb-2">No weight entries found</p>
+              <p className="text-sm text-muted-foreground">Start logging your weight from the home page to see charts and statistics here.</p>
+            </div>
+          </div>
         </Card>
       </div>
     );
@@ -258,7 +274,10 @@ export default function Weight() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Weight Tracking</h1>
+      <div>
+        <h1 className="text-3xl font-bold">Weight Tracking</h1>
+        <p className="text-muted-foreground">Monitor your body weight progress</p>
+      </div>
 
       {/* Quick Entry Form */}
       <Card>

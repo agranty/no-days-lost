@@ -93,7 +93,7 @@ export default function AdminBilling() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="space-y-6">
       <div className="flex items-center gap-4">
         <Button variant="outline" size="sm" asChild>
           <Link to="/admin">

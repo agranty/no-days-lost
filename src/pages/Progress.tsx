@@ -13,30 +13,30 @@ export default function Progress() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center space-x-2">
-        <TrendingUp className="h-8 w-8 text-primary" />
-        <h1 className="text-3xl font-bold">Progress</h1>
+      <div>
+        <h1 className="text-3xl font-bold">Progress Tracking</h1>
+        <p className="text-muted-foreground">Track your improvements across different areas</p>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="strength" className="flex items-center gap-2">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <TabsList className="grid w-full grid-cols-5 h-12">
+          <TabsTrigger value="strength" className="flex items-center gap-2 h-10">
             <Target className="h-4 w-4" />
             <span className="hidden sm:inline">Strength</span>
           </TabsTrigger>
-          <TabsTrigger value="bodyparts" className="flex items-center gap-2">
+          <TabsTrigger value="bodyparts" className="flex items-center gap-2 h-10">
             <TrendingUp className="h-4 w-4" />
             <span className="hidden sm:inline">Body Parts</span>
           </TabsTrigger>
-          <TabsTrigger value="cardio" className="flex items-center gap-2">
+          <TabsTrigger value="cardio" className="flex items-center gap-2 h-10">
             <Heart className="h-4 w-4" />
             <span className="hidden sm:inline">Cardio</span>
           </TabsTrigger>
-          <TabsTrigger value="weight" className="flex items-center gap-2">
+          <TabsTrigger value="weight" className="flex items-center gap-2 h-10">
             <Weight className="h-4 w-4" />
             <span className="hidden sm:inline">Weight</span>
           </TabsTrigger>
-          <TabsTrigger value="calendar" className="flex items-center gap-2">
+          <TabsTrigger value="calendar" className="flex items-center gap-2 h-10">
             <Calendar className="h-4 w-4" />
             <span className="hidden sm:inline">Calendar</span>
           </TabsTrigger>
