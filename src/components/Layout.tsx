@@ -1,9 +1,10 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { useResponsiveText } from '@/lib/responsive-utils';
+import { supabase } from '@/integrations/supabase/client';
 import { 
   Dumbbell, 
   Plus, 
@@ -13,28 +14,52 @@ import {
   Weight, 
   Download,
   User,
-  LogOut
+  LogOut,
+  Shield
 } from 'lucide-react';
 
 interface LayoutProps {
   children: ReactNode;
 }
 
-const navigation = [
+const getNavigation = (isAdmin: boolean) => [
   { name: 'workoutLog', href: '/log', icon: Plus },
   { name: 'History', href: '/history', icon: History },
   { name: 'Progress', href: '/progress', icon: TrendingUp },
   { name: 'Weight', href: '/weight', icon: Weight },
+  ...(isAdmin ? [{ name: 'Admin', href: '/admin', icon: Shield }] : []),
 ];
 
 export default function Layout({ children }: LayoutProps) {
   const { user, signOut } = useAuth();
   const location = useLocation();
   const responsiveText = useResponsiveText();
+  const [userProfile, setUserProfile] = useState<any>(null);
+
+  useEffect(() => {
+    if (user) {
+      loadUserProfile();
+    }
+  }, [user]);
+
+  const loadUserProfile = async () => {
+    try {
+      const { data } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user?.id)
+        .single();
+      setUserProfile(data);
+    } catch (error) {
+      console.error('Error loading profile:', error);
+    }
+  };
 
   if (!user) {
     return <>{children}</>;
   }
+
+  const navigation = getNavigation(userProfile?.role === 'admin');
 
   return (
     <div className="min-h-screen bg-background">

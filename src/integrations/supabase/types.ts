@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      audit_logs: {
+        Row: {
+          action: string
+          actor_user_id: string
+          created_at: string
+          id: string
+          metadata: Json | null
+          target_user_id: string | null
+        }
+        Insert: {
+          action: string
+          actor_user_id: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          target_user_id?: string | null
+        }
+        Update: {
+          action?: string
+          actor_user_id?: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          target_user_id?: string | null
+        }
+        Relationships: []
+      }
       body_parts: {
         Row: {
           created_at: string | null
@@ -284,7 +311,9 @@ export type Database = {
           current_period_end: string | null
           email: string
           id: string
+          last_login_at: string | null
           plan: string
+          role: string
           stripe_customer_id: string | null
           subscription_status: string
           updated_at: string
@@ -294,7 +323,9 @@ export type Database = {
           current_period_end?: string | null
           email: string
           id: string
+          last_login_at?: string | null
           plan?: string
+          role?: string
           stripe_customer_id?: string | null
           subscription_status?: string
           updated_at?: string
@@ -304,7 +335,9 @@ export type Database = {
           current_period_end?: string | null
           email?: string
           id?: string
+          last_login_at?: string | null
           plan?: string
+          role?: string
           stripe_customer_id?: string | null
           subscription_status?: string
           updated_at?: string
@@ -529,6 +562,10 @@ export type Database = {
       get_profile_for_webhook: {
         Args: { profile_id: string }
         Returns: Json
+      }
+      is_admin: {
+        Args: { user_id: string }
+        Returns: boolean
       }
     }
     Enums: {
