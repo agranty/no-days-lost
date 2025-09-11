@@ -235,15 +235,15 @@ export default function Weight() {
 
   if (loading) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-8">
         <div>
-          <h1 className="text-3xl font-bold">Weight Tracking</h1>
-          <p className="text-muted-foreground">Monitor your body weight progress</p>
+          <h1 className="text-4xl font-bold tracking-tight">Weight Tracking</h1>
+          <p className="text-muted-foreground text-lg">Monitor your body weight progress</p>
         </div>
-        <Card className="p-8">
+        <Card className="p-12 border-0 shadow-sm">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Loading your weight data...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-6"></div>
+            <p className="text-muted-foreground text-lg">Loading your weight data...</p>
           </div>
         </Card>
       </div>
@@ -252,19 +252,19 @@ export default function Weight() {
 
   if (weightEntries.length === 0) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-8">
         <div>
-          <h1 className="text-3xl font-bold">Weight Tracking</h1>
-          <p className="text-muted-foreground">Monitor your body weight progress</p>
+          <h1 className="text-4xl font-bold tracking-tight">Weight Tracking</h1>
+          <p className="text-muted-foreground text-lg">Monitor your body weight progress</p>
         </div>
-        <Card className="p-8">
-          <div className="text-center space-y-4">
-            <div className="rounded-full bg-muted/50 p-4 w-fit mx-auto">
-              <WeightIcon className="h-12 w-12 text-muted-foreground" />
+        <Card className="p-12 border-0 shadow-sm">
+          <div className="text-center space-y-6">
+            <div className="rounded-full bg-muted/30 p-6 w-fit mx-auto">
+              <WeightIcon className="h-16 w-16 text-muted-foreground" />
             </div>
             <div>
-              <p className="text-muted-foreground mb-2">No weight entries found</p>
-              <p className="text-sm text-muted-foreground">Start logging your weight from the home page to see charts and statistics here.</p>
+              <p className="text-muted-foreground text-lg mb-2">No weight entries found</p>
+              <p className="text-muted-foreground">Start logging your weight from the home page to see charts and statistics here.</p>
             </div>
           </div>
         </Card>
@@ -273,10 +273,10 @@ export default function Weight() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold">Weight Tracking</h1>
-        <p className="text-muted-foreground">Monitor your body weight progress</p>
+        <h1 className="text-4xl font-bold tracking-tight">Weight Tracking</h1>
+        <p className="text-muted-foreground text-lg">Monitor your body weight progress</p>
       </div>
 
       {/* Quick Entry Form */}

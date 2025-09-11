@@ -31,19 +31,19 @@ const Index = () => {
       {/* Header Section */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Today</h1>
-          <p className="text-muted-foreground">Track your progress</p>
+          <h1 className="text-4xl font-bold tracking-tight">Dashboard</h1>
+          <p className="text-muted-foreground text-lg">Track your fitness journey</p>
         </div>
-        <Button variant="outline" size="sm">
-          Edit
+        <Button variant="outline" size="sm" className="h-10 px-4">
+          View All
         </Button>
       </div>
 
       {/* Main Progress Card */}
-      <Card className="p-6">
-        <div className="text-center mb-6">
-          <h2 className="text-xl font-semibold mb-2">Workout Progress</h2>
-          <p className="text-sm text-muted-foreground">Today's Targets</p>
+      <Card className="p-8 shadow-sm border-0">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold mb-3">Weekly Progress</h2>
+          <p className="text-muted-foreground">Track your weekly fitness goals</p>
         </div>
         
         <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
@@ -129,108 +129,122 @@ const Index = () => {
       </Card>
 
       {/* Quick Actions Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="hover:shadow-lg transition-all cursor-pointer hover:scale-105">
-          <CardContent className="p-4 text-center">
-            <Plus className="h-8 w-8 mx-auto text-accent mb-2" />
-            <h3 className="font-semibold mb-1">Start Workout</h3>
-            <p className="text-xs text-muted-foreground mb-3">Begin training</p>
-            <Button asChild size="sm" className="w-full">
-              <a href="/log">Start</a>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card className="group hover:shadow-md transition-all duration-200 cursor-pointer border-0 shadow-sm hover:scale-[1.02]">
+          <CardContent className="p-6 text-center">
+            <div className="rounded-full bg-accent/10 p-3 w-fit mx-auto mb-4">
+              <Plus className="h-6 w-6 text-accent" />
+            </div>
+            <h3 className="font-semibold text-lg mb-2">Start Workout</h3>
+            <p className="text-sm text-muted-foreground mb-4">Begin your training session</p>
+            <Button asChild size="sm" className="w-full h-10">
+              <a href="/log">Get Started</a>
             </Button>
           </CardContent>
         </Card>
 
-        <Card className="hover:shadow-lg transition-all cursor-pointer hover:scale-105">
-          <CardContent className="p-4 text-center">
-            <History className="h-8 w-8 mx-auto text-primary mb-2" />
-            <h3 className="font-semibold mb-1">History</h3>
-            <p className="text-xs text-muted-foreground mb-3">Past workouts</p>
-            <Button asChild variant="outline" size="sm" className="w-full">
-              <a href="/history">View</a>
+        <Card className="group hover:shadow-md transition-all duration-200 cursor-pointer border-0 shadow-sm hover:scale-[1.02]">
+          <CardContent className="p-6 text-center">
+            <div className="rounded-full bg-primary/10 p-3 w-fit mx-auto mb-4">
+              <History className="h-6 w-6 text-primary" />
+            </div>
+            <h3 className="font-semibold text-lg mb-2">View History</h3>
+            <p className="text-sm text-muted-foreground mb-4">Review past workouts</p>
+            <Button asChild variant="outline" size="sm" className="w-full h-10">
+              <a href="/history">Browse</a>
             </Button>
           </CardContent>
         </Card>
 
-        <Card className="hover:shadow-lg transition-all cursor-pointer hover:scale-105">
-          <CardContent className="p-4 text-center">
-            <TrendingUp className="h-8 w-8 mx-auto text-success mb-2" />
-            <h3 className="font-semibold mb-1">Progress</h3>
-            <p className="text-xs text-muted-foreground mb-3">Track gains</p>
-            <Button asChild variant="outline" size="sm" className="w-full">
-              <a href="/progress">View</a>
+        <Card className="group hover:shadow-md transition-all duration-200 cursor-pointer border-0 shadow-sm hover:scale-[1.02]">
+          <CardContent className="p-6 text-center">
+            <div className="rounded-full bg-success/10 p-3 w-fit mx-auto mb-4">
+              <TrendingUp className="h-6 w-6 text-success" />
+            </div>
+            <h3 className="font-semibold text-lg mb-2">Track Progress</h3>
+            <p className="text-sm text-muted-foreground mb-4">Monitor improvements</p>
+            <Button asChild variant="outline" size="sm" className="w-full h-10">
+              <a href="/progress">Analyze</a>
             </Button>
           </CardContent>
         </Card>
 
-        <Card className="hover:shadow-lg transition-all cursor-pointer hover:scale-105">
-          <CardContent className="p-4 text-center">
-            <Weight className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
-            <h3 className="font-semibold mb-1">Weight</h3>
-            <p className="text-xs text-muted-foreground mb-3">Body tracking</p>
-            <Button asChild variant="outline" size="sm" className="w-full">
-              <a href="/weight">Log</a>
+        <Card className="group hover:shadow-md transition-all duration-200 cursor-pointer border-0 shadow-sm hover:scale-[1.02]">
+          <CardContent className="p-6 text-center">
+            <div className="rounded-full bg-primary/10 p-3 w-fit mx-auto mb-4">
+              <Weight className="h-6 w-6 text-primary" />
+            </div>
+            <h3 className="font-semibold text-lg mb-2">Log Weight</h3>
+            <p className="text-sm text-muted-foreground mb-4">Track body weight</p>
+            <Button asChild variant="outline" size="sm" className="w-full h-10">
+              <a href="/weight">Record</a>
             </Button>
           </CardContent>
         </Card>
       </div>
 
       {/* Activity Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <Footprints className="h-5 w-5 text-accent" />
-                <span className="font-semibold">Steps</span>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="rounded-full bg-accent/10 p-2">
+                  <Footprints className="h-5 w-5 text-accent" />
+                </div>
+                <span className="font-semibold text-lg">Daily Steps</span>
               </div>
-              <Plus className="h-4 w-4 text-muted-foreground" />
+              <Plus className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-primary transition-colors" />
             </div>
-            <div className="space-y-1">
-              <div className="text-2xl font-bold">0</div>
-              <div className="text-xs text-muted-foreground">Goal: 10,000 steps</div>
+            <div className="space-y-3">
+              <div className="text-3xl font-bold">0</div>
+              <div className="text-sm text-muted-foreground">Goal: 10,000 steps</div>
               <div className="w-full bg-muted rounded-full h-2">
-                <div className="bg-accent h-2 rounded-full w-0"></div>
+                <div className="bg-accent h-2 rounded-full w-0 transition-all duration-300"></div>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <Dumbbell className="h-5 w-5 text-success" />
-                <span className="font-semibold">Exercise</span>
+        <Card className="border-0 shadow-sm">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="rounded-full bg-success/10 p-2">
+                  <Dumbbell className="h-5 w-5 text-success" />
+                </div>
+                <span className="font-semibold text-lg">Weekly Exercise</span>
               </div>
-              <Plus className="h-4 w-4 text-muted-foreground" />
+              <Plus className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-primary transition-colors" />
             </div>
-            <div className="space-y-1">
-              <div className="text-2xl font-bold">0 min</div>
-              <div className="text-xs text-muted-foreground">This week</div>
+            <div className="space-y-3">
+              <div className="text-3xl font-bold">0 <span className="text-base text-muted-foreground">min</span></div>
+              <div className="text-sm text-muted-foreground">This week</div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="md:col-span-2 lg:col-span-1">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <Weight className="h-5 w-5 text-primary" />
-                <span className="font-semibold">Weight</span>
+        <Card className="md:col-span-2 lg:col-span-1 border-0 shadow-sm">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="rounded-full bg-primary/10 p-2">
+                  <Weight className="h-5 w-5 text-primary" />
+                </div>
+                <span className="font-semibold text-lg">Weight Trend</span>
               </div>
-              <Plus className="h-4 w-4 text-muted-foreground" />
+              <Plus className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-primary transition-colors" />
             </div>
-            <div className="space-y-1">
-              <div className="text-xs text-muted-foreground">Last 30 days</div>
-              <div className="h-12 flex items-end justify-between">
-                <div className="w-1 bg-muted rounded-full h-8"></div>
-                <div className="w-1 bg-muted rounded-full h-6"></div>
-                <div className="w-1 bg-muted rounded-full h-10"></div>
-                <div className="w-1 bg-muted rounded-full h-4"></div>
-                <div className="w-1 bg-muted rounded-full h-7"></div>
-                <div className="w-1 bg-muted rounded-full h-9"></div>
-                <div className="w-1 bg-primary rounded-full h-12"></div>
+            <div className="space-y-3">
+              <div className="text-sm text-muted-foreground">Last 30 days</div>
+              <div className="h-16 flex items-end justify-between gap-1">
+                <div className="w-2 bg-muted rounded-full h-10"></div>
+                <div className="w-2 bg-muted rounded-full h-8"></div>
+                <div className="w-2 bg-muted rounded-full h-12"></div>
+                <div className="w-2 bg-muted rounded-full h-6"></div>
+                <div className="w-2 bg-muted rounded-full h-9"></div>
+                <div className="w-2 bg-muted rounded-full h-11"></div>
+                <div className="w-2 bg-primary rounded-full h-16"></div>
               </div>
             </div>
           </CardContent>

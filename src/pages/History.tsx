@@ -95,15 +95,17 @@ export default function History() {
 
   if (loading) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-8">
         <div>
-          <h1 className="text-3xl font-bold">Workout History</h1>
-          <p className="text-muted-foreground">View your past workouts</p>
+          <h1 className="text-4xl font-bold tracking-tight">Workout History</h1>
+          <p className="text-muted-foreground text-lg">View your past workouts</p>
         </div>
-        <Card className="p-8">
+        <Card className="p-12 border-0 shadow-sm">
           <div className="text-center">
-            <Dumbbell className="h-12 w-12 mx-auto mb-4 text-primary animate-pulse" />
-            <p className="text-muted-foreground">Loading your workout history...</p>
+            <div className="rounded-full bg-primary/10 p-4 w-fit mx-auto mb-6">
+              <Dumbbell className="h-12 w-12 text-primary animate-pulse" />
+            </div>
+            <p className="text-muted-foreground text-lg">Loading your workout history...</p>
           </div>
         </Card>
       </div>
@@ -112,20 +114,20 @@ export default function History() {
 
   if (workouts.length === 0) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-8">
         <div>
-          <h1 className="text-3xl font-bold">Workout History</h1>
-          <p className="text-muted-foreground">View your past workouts</p>
+          <h1 className="text-4xl font-bold tracking-tight">Workout History</h1>
+          <p className="text-muted-foreground text-lg">View your past workouts</p>
         </div>
-        <Card className="p-8">
-          <div className="text-center space-y-4">
-            <div className="rounded-full bg-muted/50 p-4 w-fit mx-auto">
-              <Dumbbell className="h-12 w-12 text-muted-foreground" />
+        <Card className="p-12 border-0 shadow-sm">
+          <div className="text-center space-y-6">
+            <div className="rounded-full bg-muted/30 p-6 w-fit mx-auto">
+              <Dumbbell className="h-16 w-16 text-muted-foreground" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold mb-2">No workouts yet</h3>
-              <p className="text-muted-foreground mb-6">Start your fitness journey by logging your first workout!</p>
-              <Button onClick={() => navigate('/log')} size="lg">
+              <h3 className="text-2xl font-bold mb-3">No workouts yet</h3>
+              <p className="text-muted-foreground text-lg mb-8">Start your fitness journey by logging your first workout!</p>
+              <Button onClick={() => navigate('/log')} size="lg" className="h-12 px-8">
                 Log Your First Workout
               </Button>
             </div>
@@ -136,44 +138,44 @@ export default function History() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold">Workout History</h1>
-        <p className="text-muted-foreground">View your past workouts</p>
+        <h1 className="text-4xl font-bold tracking-tight">Workout History</h1>
+        <p className="text-muted-foreground text-lg">View your past workouts</p>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-4">
         {workouts.map((workout, index) => (
           <Card 
             key={`${workout.date}-${index}`}
-            className="cursor-pointer hover:shadow-md transition-all duration-200 hover:scale-[1.01] border-0 shadow-sm"
+            className="cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-[1.005] border-0 shadow-sm bg-card/50"
             onClick={() => handleWorkoutClick(workout.date)}
           >
-            <CardContent className="p-6">
+            <CardContent className="p-8">
               <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-6 flex-1">
-                  <div className="font-semibold text-lg min-w-[140px]">
+                <div className="flex items-center space-x-8 flex-1">
+                  <div className="font-bold text-xl min-w-[160px] text-primary">
                     {format(new Date(workout.date), 'MMM dd, yyyy')}
                   </div>
-                  <div className="text-muted-foreground max-w-[200px] truncate">
+                  <div className="text-muted-foreground max-w-[240px] truncate text-lg">
                     {workout.workout_type}
                   </div>
-                  <div className="text-sm text-muted-foreground">
+                  <div className="text-muted-foreground">
                     {workout.body_parts.join(', ')}
                   </div>
-                  <div className="text-sm">
+                  <div>
                     {workout.rpe > 0 ? (
-                      <span className="bg-primary/10 text-primary px-2 py-1 rounded-full text-xs font-medium">
-                        RPE: {workout.rpe}
+                      <span className="bg-primary/15 text-primary px-3 py-1.5 rounded-full text-sm font-semibold">
+                        RPE {workout.rpe}
                       </span>
                     ) : (
                       <span className="text-muted-foreground">-</span>
                     )}
                   </div>
                 </div>
-                <div className="text-right text-sm text-muted-foreground space-y-1">
-                  <div className="font-medium">{workout.exercise_count} exercises</div>
-                  {workout.duration && <div>{workout.duration} min</div>}
+                <div className="text-right text-muted-foreground space-y-2">
+                  <div className="font-semibold text-lg">{workout.exercise_count} exercises</div>
+                  {workout.duration && <div className="text-sm">{workout.duration} minutes</div>}
                 </div>
               </div>
             </CardContent>

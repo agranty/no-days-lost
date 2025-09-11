@@ -85,39 +85,40 @@ export default function Auth() {
 
   if (resetMode) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/20 p-4">
-        <Card className="w-full max-w-md shadow-xl border-0 bg-card/80 backdrop-blur-sm">
-          <CardHeader className="text-center space-y-4">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted/10 p-4">
+        <Card className="w-full max-w-lg shadow-lg border-0 bg-card/95 backdrop-blur-sm">
+          <CardHeader className="text-center space-y-6 pb-8">
             <div className="flex justify-center">
-              <div className="rounded-full bg-primary/10 p-3">
-                <Dumbbell className="h-8 w-8 text-primary" />
+              <div className="rounded-full bg-gradient-to-r from-primary to-accent p-4">
+                <Dumbbell className="h-10 w-10 text-white" />
               </div>
             </div>
             <div>
-              <CardTitle className="text-2xl">Reset Password</CardTitle>
-              <CardDescription className="text-base">Enter your email to receive a reset link</CardDescription>
+              <CardTitle className="text-3xl font-bold">Reset Password</CardTitle>
+              <CardDescription className="text-base mt-2">Enter your email to receive a reset link</CardDescription>
             </div>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <form onSubmit={handleResetPassword} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium">Email</Label>
+          <CardContent className="space-y-6 pb-8">
+            <form onSubmit={handleResetPassword} className="space-y-6">
+              <div className="space-y-3">
+                <Label htmlFor="email" className="text-sm font-medium">Email Address</Label>
                 <Input
                   id="email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="h-11"
+                  className="h-12 text-base"
+                  placeholder="Enter your email"
                   required
                 />
               </div>
-              <Button type="submit" className="w-full h-11" disabled={loading}>
-                {loading ? 'Sending...' : 'Send Reset Link'}
+              <Button type="submit" className="w-full h-12 text-base" disabled={loading}>
+                {loading ? 'Sending Reset Link...' : 'Send Reset Link'}
               </Button>
               <Button
                 type="button"
                 variant="ghost"
-                className="w-full h-11"
+                className="w-full h-12 text-base"
                 onClick={() => setResetMode(false)}
               >
                 Back to Sign In
@@ -130,57 +131,59 @@ export default function Auth() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/20 p-4">
-      <Card className="w-full max-w-md shadow-xl border-0 bg-card/80 backdrop-blur-sm">
-        <CardHeader className="text-center space-y-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted/10 p-4">
+      <Card className="w-full max-w-lg shadow-lg border-0 bg-card/95 backdrop-blur-sm">
+        <CardHeader className="text-center space-y-6 pb-8">
           <div className="flex justify-center">
-            <div className="rounded-full bg-primary/10 p-3">
-              <Dumbbell className="h-8 w-8 text-primary" />
+            <div className="rounded-full bg-gradient-to-r from-primary to-accent p-4">
+              <Dumbbell className="h-10 w-10 text-white" />
             </div>
           </div>
           <div>
-            <CardTitle className="text-3xl font-bold">No Days Lost</CardTitle>
-            <CardDescription className="text-base">Track your fitness journey</CardDescription>
+            <CardTitle className="text-4xl font-bold">No Days Lost</CardTitle>
+            <CardDescription className="text-lg mt-2">Your fitness journey starts here</CardDescription>
           </div>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-8 pb-8">
           <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 h-11">
-              <TabsTrigger value="signin" className="h-9">Sign In</TabsTrigger>
-              <TabsTrigger value="signup" className="h-9">Sign Up</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 h-12 p-1">
+              <TabsTrigger value="signin" className="h-10 text-base">Sign In</TabsTrigger>
+              <TabsTrigger value="signup" className="h-10 text-base">Sign Up</TabsTrigger>
             </TabsList>
             
-            <TabsContent value="signin" className="space-y-4 mt-6">
-              <form onSubmit={handleSignIn} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="signin-email" className="text-sm font-medium">Email</Label>
+            <TabsContent value="signin" className="space-y-6 mt-8">
+              <form onSubmit={handleSignIn} className="space-y-6">
+                <div className="space-y-3">
+                  <Label htmlFor="signin-email" className="text-sm font-medium">Email Address</Label>
                   <Input
                     id="signin-email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="h-11"
+                    className="h-12 text-base"
+                    placeholder="Enter your email"
                     required
                   />
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <Label htmlFor="signin-password" className="text-sm font-medium">Password</Label>
                   <Input
                     id="signin-password"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="h-11"
+                    className="h-12 text-base"
+                    placeholder="Enter your password"
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full h-11" disabled={loading}>
-                  {loading ? 'Signing in...' : 'Sign In'}
+                <Button type="submit" className="w-full h-12 text-base" disabled={loading}>
+                  {loading ? 'Signing In...' : 'Sign In'}
                 </Button>
                 <Button
                   type="button"
                   variant="ghost"
-                  className="w-full h-11"
+                  className="w-full h-12 text-base"
                   onClick={() => setResetMode(true)}
                 >
                   Forgot Password?
@@ -188,33 +191,35 @@ export default function Auth() {
               </form>
             </TabsContent>
             
-            <TabsContent value="signup" className="space-y-4 mt-6">
-              <form onSubmit={handleSignUp} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="signup-email" className="text-sm font-medium">Email</Label>
+            <TabsContent value="signup" className="space-y-6 mt-8">
+              <form onSubmit={handleSignUp} className="space-y-6">
+                <div className="space-y-3">
+                  <Label htmlFor="signup-email" className="text-sm font-medium">Email Address</Label>
                   <Input
                     id="signup-email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="h-11"
+                    className="h-12 text-base"
+                    placeholder="Enter your email"
                     required
                   />
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <Label htmlFor="signup-password" className="text-sm font-medium">Password</Label>
                   <Input
                     id="signup-password"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="h-11"
+                    className="h-12 text-base"
+                    placeholder="Create a password (min 6 characters)"
                     required
                     minLength={6}
                   />
                 </div>
-                <Button type="submit" className="w-full h-11" disabled={loading}>
-                  {loading ? 'Creating account...' : 'Create Account'}
+                <Button type="submit" className="w-full h-12 text-base" disabled={loading}>
+                  {loading ? 'Creating Account...' : 'Create Account'}
                 </Button>
               </form>
             </TabsContent>

@@ -93,23 +93,23 @@ export default function AdminBilling() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="sm" asChild>
+        <Button variant="outline" size="sm" className="h-10" asChild>
           <Link to="/admin">
             <ChevronLeft className="h-4 w-4 mr-2" />
             Back to Admin
           </Link>
         </Button>
         <div>
-          <h1 className="text-3xl font-bold">Billing & Subscriptions</h1>
-          <p className="text-muted-foreground">Monitor subscription metrics and billing status</p>
+          <h1 className="text-4xl font-bold tracking-tight">Billing & Subscriptions</h1>
+          <p className="text-muted-foreground text-lg">Monitor subscription metrics and billing status</p>
         </div>
       </div>
 
       {/* Billing Stats */}
       {stats && (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Active Pro Users</CardTitle>

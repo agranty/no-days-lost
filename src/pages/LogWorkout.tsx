@@ -324,13 +324,18 @@ export default function LogWorkout() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Log Workout</h1>
-          <p className="text-muted-foreground">Track your training session</p>
+          <h1 className="text-4xl font-bold tracking-tight">Log Workout</h1>
+          <p className="text-muted-foreground text-lg">Track your training session</p>
         </div>
-        <Button onClick={saveWorkout} disabled={loading || workoutExercises.length === 0}>
+        <Button 
+          onClick={saveWorkout} 
+          disabled={loading || workoutExercises.length === 0}
+          size="lg"
+          className="h-11 px-6"
+        >
           <Save className="mr-2 h-4 w-4" />
           {loading ? 'Saving...' : 'Save Workout'}
         </Button>

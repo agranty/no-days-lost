@@ -231,40 +231,40 @@ export default function AdminUsers() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex items-center gap-4">
-        <Button variant="outline" size="sm" asChild>
+        <Button variant="outline" size="sm" className="h-10" asChild>
           <Link to="/admin">
             <ChevronLeft className="h-4 w-4 mr-2" />
             Back to Admin
           </Link>
         </Button>
         <div>
-          <h1 className="text-3xl font-bold">User Management</h1>
-          <p className="text-muted-foreground">Manage user accounts, roles, and subscriptions</p>
+          <h1 className="text-4xl font-bold tracking-tight">User Management</h1>
+          <p className="text-muted-foreground text-lg">Manage user accounts, roles, and subscriptions</p>
         </div>
       </div>
 
-      <Card className="shadow-sm border-0">
-        <CardHeader>
-          <CardTitle>Search & Filter</CardTitle>
+      <Card className="shadow-lg border-0">
+        <CardHeader className="pb-6">
+          <CardTitle className="text-xl">Search & Filter</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="flex flex-col md:flex-row gap-4">
+        <CardContent className="pb-8">
+          <div className="flex flex-col md:flex-row gap-6">
             <div className="flex-1">
               <div className="relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Search className="absolute left-4 top-4 h-5 w-5 text-muted-foreground" />
                 <Input
-                  placeholder="Search by email..."
+                  placeholder="Search by email address..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-9 h-11"
+                  className="pl-12 h-12 text-base"
                 />
               </div>
             </div>
             <Select value={roleFilter} onValueChange={setRoleFilter}>
-              <SelectTrigger className="w-[140px] h-11">
-                <SelectValue placeholder="Role" />
+              <SelectTrigger className="w-[160px] h-12">
+                <SelectValue placeholder="Filter by role" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Roles</SelectItem>
@@ -273,8 +273,8 @@ export default function AdminUsers() {
               </SelectContent>
             </Select>
             <Select value={planFilter} onValueChange={setPlanFilter}>
-              <SelectTrigger className="w-[140px] h-11">
-                <SelectValue placeholder="Plan" />
+              <SelectTrigger className="w-[160px] h-12">
+                <SelectValue placeholder="Filter by plan" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Plans</SelectItem>
@@ -286,9 +286,9 @@ export default function AdminUsers() {
         </CardContent>
       </Card>
 
-      <Card className="shadow-sm border-0">
-        <CardHeader>
-          <CardTitle>Users ({filteredUsers.length})</CardTitle>
+      <Card className="shadow-lg border-0">
+        <CardHeader className="pb-6">
+          <CardTitle className="text-xl">Users ({filteredUsers.length})</CardTitle>
         </CardHeader>
         <CardContent>
           {usersLoading ? (
