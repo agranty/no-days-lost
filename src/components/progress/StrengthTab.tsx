@@ -230,7 +230,7 @@ export default function StrengthTab() {
             <Card>
               <CardContent className="p-4">
                 <div className="text-sm font-medium text-muted-foreground">Current Est. 1RM</div>
-                <div className="text-2xl font-bold">{latestOneRM.toFixed(1)} kg</div>
+                <div className="text-2xl font-bold">{latestOneRM.toFixed(1)} lb</div>
               </CardContent>
             </Card>
             <Card>
@@ -258,12 +258,12 @@ export default function StrengthTab() {
                       tickFormatter={(date) => format(parseISO(date), 'MMM dd')}
                     />
                     <YAxis 
-                      label={{ value: 'Weight (kg)', angle: -90, position: 'insideLeft' }}
+                      label={{ value: 'Weight (lb)', angle: -90, position: 'insideLeft' }}
                     />
                     <Tooltip 
                       labelFormatter={(date) => format(parseISO(date), 'MMM dd, yyyy')}
                       formatter={(value, name) => [
-                        `${Number(value).toFixed(1)} kg`,
+                        `${Number(value).toFixed(1)} lb`,
                         name === 'oneRM' ? 'Est. 1RM' : name
                       ]}
                     />
@@ -306,11 +306,11 @@ export default function StrengthTab() {
                       tickFormatter={(date) => format(parseISO(date), 'MMM dd')}
                     />
                     <YAxis 
-                      label={{ value: 'Volume (kg)', angle: -90, position: 'insideLeft' }}
+                      label={{ value: 'Volume (lb)', angle: -90, position: 'insideLeft' }}
                     />
                     <Tooltip 
                       labelFormatter={(date) => format(parseISO(date), 'MMM dd, yyyy')}
-                      formatter={(value) => [`${value} kg`, 'Volume']}
+                      formatter={(value) => [`${value} lb`, 'Volume']}
                     />
                     <Bar 
                       dataKey="volume" 
@@ -344,7 +344,7 @@ export default function StrengthTab() {
                             {format(parseISO(pr.date), 'MMM dd, yyyy')}
                           </div>
                           <div className="text-sm text-muted-foreground">
-                            Est. 1RM: {pr.oneRM.toFixed(1)} kg • Top Set: {pr.topSetWeight.toFixed(1)}×{pr.topSetReps}
+                            Est. 1RM: {pr.oneRM.toFixed(1)} lb • Top Set: {pr.topSetWeight.toFixed(1)}×{pr.topSetReps}
                           </div>
                         </div>
                         <Badge variant="secondary" className="text-yellow-600">

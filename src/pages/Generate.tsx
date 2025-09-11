@@ -536,7 +536,7 @@ export default function Generate() {
               set_index: j + 1,
               reps: set.reps,
               weight: set.weight,
-              unit: (set.unit as 'kg' | 'lb') || 'kg',
+              unit: (set.unit as 'kg' | 'lb') || 'lb',
               rpe: set.rpe,
               rest_sec: set.rest_sec
             });

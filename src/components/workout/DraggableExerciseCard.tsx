@@ -203,7 +203,7 @@ export default function DraggableExerciseCard({
                         </td>
                         <td className="p-2">
                           <Select
-                            value={set.unit || 'kg'}
+                            value={set.unit || 'lb'}
                             onValueChange={(value) => onUpdateSet(exerciseIndex, setIndex, 'unit', value)}
                           >
                             <SelectTrigger className="w-16">
@@ -352,7 +352,7 @@ export default function DraggableExerciseCard({
                   <span>, Top set {summary.topSet.weight?.toFixed(1)}×{summary.topSet.reps}</span>
                 )}
                 {summary.totalVolume > 0 && (
-                  <span>, Total volume {summary.totalVolume.toLocaleString()} {summary.topSet?.unit || 'kg'}</span>
+                  <span>, Total volume {summary.totalVolume.toLocaleString()} {summary.topSet?.unit || 'lb'}</span>
                 )}
                 {summary.avgRpe && (
                   <span>, Avg RPE {summary.avgRpe.toFixed(1)}</span>
@@ -361,7 +361,7 @@ export default function DraggableExerciseCard({
                   <span>, Avg Rest {Math.round(summary.avgRest)}s</span>
                 )}
                 {summary.bestOneRM && (
-                  <span>, Best est. {responsiveText.estimatedOneRepMax} {summary.bestOneRM.toFixed(1)} {summary.topSet?.unit || 'kg'}</span>
+                  <span>, Best est. {responsiveText.estimatedOneRepMax} {summary.bestOneRM.toFixed(1)} {summary.topSet?.unit || 'lb'}</span>
                 )}
               </div>
             );

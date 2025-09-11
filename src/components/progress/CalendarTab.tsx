@@ -190,7 +190,7 @@ export default function CalendarTab() {
         <Card>
           <CardContent className="p-4">
             <div className="text-sm font-medium text-muted-foreground">Total Volume</div>
-            <div className="text-2xl font-bold">{totalVolume.toLocaleString()} kg</div>
+            <div className="text-2xl font-bold">{totalVolume.toLocaleString()} lb</div>
           </CardContent>
         </Card>
         <Card>
@@ -294,7 +294,7 @@ export default function CalendarTab() {
                     <div className="text-sm text-muted-foreground">
                       {sessionData.get(hoveredDate)!.bodyParts.join(', ')} • 
                       {sessionData.get(hoveredDate)!.duration}min • 
-                      {sessionData.get(hoveredDate)!.volume.toLocaleString()}kg volume
+                      {sessionData.get(hoveredDate)!.volume.toLocaleString()}lb volume
                     </div>
                   </div>
                 </CardContent>
@@ -329,12 +329,12 @@ export default function CalendarTab() {
                     </div>
                     <div className="flex items-center gap-1">
                       <TrendingUp className="h-3 w-3" />
-                      {week.totalVolume.toLocaleString()}kg
+                      {week.totalVolume.toLocaleString()}lb
                     </div>
                   </div>
                 </div>
                 <Badge variant="outline">
-                  {(week.totalVolume / week.sessionCount).toFixed(0)}kg/session
+                  {(week.totalVolume / week.sessionCount).toFixed(0)}lb/session
                 </Badge>
               </div>
             ))}

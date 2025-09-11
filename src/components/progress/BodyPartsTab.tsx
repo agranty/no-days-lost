@@ -233,8 +233,8 @@ export default function BodyPartsTab() {
                 <BarChart data={weeklyData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="week" />
-                  <YAxis label={{ value: 'Volume (kg)', angle: -90, position: 'insideLeft' }} />
-                  <Tooltip formatter={(value) => [`${value} kg`, '']} />
+                  <YAxis label={{ value: 'Volume (lb)', angle: -90, position: 'insideLeft' }} />
+                  <Tooltip formatter={(value) => [`${value} lb`, '']} />
                   <Bar dataKey="chest" stackId="volume" fill={bodyPartColors.chest} name="Chest" />
                   <Bar dataKey="back" stackId="volume" fill={bodyPartColors.back} name="Back" />
                   <Bar dataKey="legs" stackId="volume" fill={bodyPartColors.legs} name="Legs" />

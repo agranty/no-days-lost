@@ -27,16 +27,16 @@ export default function WeightTracker() {
 
     setSaving(true);
     try {
-      // Convert lbs to kg for storage, ensuring 1 decimal precision
-      const weightKg = Math.round(parseFloat(weight) * 0.453592 * 10) / 10;
+      // Store weight in lbs directly, ensuring 1 decimal precision
+      const weightLbs = Math.round(parseFloat(weight) * 10) / 10;
       
       const { error } = await supabase
         .from('body_weight_logs')
         .insert({
           user_id: user.id,
           date: format(date, 'yyyy-MM-dd'),
-          body_weight: weightKg,
-          unit: 'kg',
+          body_weight: weightLbs,
+          unit: 'lb',
           notes: 'Entered via weight tracker'
         });
 

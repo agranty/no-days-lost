@@ -137,15 +137,16 @@ export default function Weight() {
     setSaving(true);
     try {
       // Convert lbs to kg for storage, ensuring 1 decimal precision
-      const weightKg = Math.round(parseFloat(quickEntryWeight) * 0.453592 * 10) / 10;
+      // Store weight in lbs directly, ensuring 1 decimal precision
+      const weightLbs = Math.round(parseFloat(quickEntryWeight) * 10) / 10;
       
       const { error } = await supabase
         .from('body_weight_logs')
         .insert({
           user_id: user.id,
           date: format(quickEntryDate, 'yyyy-MM-dd'),
-          body_weight: weightKg,
-          unit: 'kg',
+          body_weight: weightLbs,
+          unit: 'lb',
           notes: quickEntryNotes || null
         });
 

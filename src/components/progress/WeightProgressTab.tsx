@@ -44,7 +44,7 @@ export default function WeightProgressTab() {
       // Load body weight data
       const { data: weightData, error: weightError } = await supabase
         .from('body_weight_logs')
-        .select('id, date, body_weight, notes, created_at')
+        .select('id, date, body_weight, unit, notes, created_at')
         .eq('user_id', user!.id)
         .order('date', { ascending: true });
 
@@ -71,7 +71,7 @@ export default function WeightProgressTab() {
       const weightMap = new Map<string, { weight: number; notes?: string; id: string; created_at: string }>();
       
       weightData?.forEach(entry => {
-        const weightLbs = entry.body_weight * 2.20462; // kg to lbs
+        const weightLbs = entry.unit === 'kg' ? entry.body_weight * 2.20462 : entry.body_weight; // convert kg to lbs if needed
         const existing = weightMap.get(entry.date);
         
         if (!existing || new Date(entry.created_at) > new Date(existing.created_at)) {

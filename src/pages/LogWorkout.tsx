@@ -167,7 +167,7 @@ export default function LogWorkout() {
   const createEmptySet = (setIndex: number): WorkoutSet => ({
     set_index: setIndex + 1,
     weight: undefined,
-    unit: 'kg',
+    unit: 'lb',
     reps: undefined,
     rpe: undefined,
     rest_sec: undefined,
