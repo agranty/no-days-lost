@@ -1,7 +1,28 @@
 import { ReactNode, useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, NavLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { 
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+  useSidebar,
+} from '@/components/ui/sidebar';
 import { useAuth } from '@/hooks/useAuth';
 import { useResponsiveText } from '@/lib/responsive-utils';
 import { supabase } from '@/integrations/supabase/client';
@@ -10,12 +31,12 @@ import {
   Plus, 
   History, 
   TrendingUp, 
-  Settings, 
   Weight, 
-  Download,
   User,
   LogOut,
-  Shield
+  Shield,
+  Wand2,
+  Menu
 } from 'lucide-react';
 
 interface LayoutProps {
@@ -23,18 +44,18 @@ interface LayoutProps {
 }
 
 const getNavigation = (isAdmin: boolean) => [
-  { name: 'workoutLog', href: '/log', icon: Plus },
-  { name: 'Generate', href: '/generate', icon: Dumbbell },
-  { name: 'History', href: '/history', icon: History },
-  { name: 'Progress', href: '/progress', icon: TrendingUp },
-  { name: 'Weight', href: '/weight', icon: Weight },
-  ...(isAdmin ? [{ name: 'Admin', href: '/admin', icon: Shield }] : []),
+  { title: 'Workout Log', href: '/log', icon: Plus },
+  { title: 'Generate', href: '/generate', icon: Wand2 },
+  { title: 'History', href: '/history', icon: History },
+  { title: 'Progress', href: '/progress', icon: TrendingUp },
+  { title: 'Weight', href: '/weight', icon: Weight },
+  ...(isAdmin ? [{ title: 'Admin', href: '/admin', icon: Shield }] : []),
 ];
 
-export default function Layout({ children }: LayoutProps) {
-  const { user, signOut } = useAuth();
+function AppSidebar() {
+  const { state } = useSidebar();
   const location = useLocation();
-  const responsiveText = useResponsiveText();
+  const { user, signOut } = useAuth();
   const [userProfile, setUserProfile] = useState<any>(null);
 
   useEffect(() => {
@@ -56,69 +77,112 @@ export default function Layout({ children }: LayoutProps) {
     }
   };
 
+  const navigation = getNavigation(userProfile?.role === 'admin');
+  const currentPath = location.pathname;
+
+  const isActive = (path: string) => currentPath === path || currentPath.startsWith(path);
+
+  return (
+    <Sidebar collapsible="icon">
+      <SidebarContent>
+        <SidebarGroup>
+          <SidebarGroupLabel className="flex items-center space-x-2 px-2">
+            <Dumbbell className="h-5 w-5 text-primary" />
+            {state === "expanded" && <span className="font-bold">No Days Lost</span>}
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {navigation.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <NavLink 
+                      to={item.href} 
+                      className={({ isActive }) => cn(
+                        "flex items-center space-x-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                        isActive 
+                          ? "bg-primary/10 text-primary border-r-2 border-primary" 
+                          : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                      )}
+                    >
+                      <item.icon className="h-4 w-4 flex-shrink-0" />
+                      {state === "expanded" && <span>{item.title}</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* User section at bottom */}
+        <div className="mt-auto p-4 border-t">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button 
+                variant="ghost" 
+                className={cn(
+                  "w-full justify-start px-2",
+                  state === "collapsed" ? "px-0 justify-center" : ""
+                )}
+              >
+                <User className="h-4 w-4" />
+                {state === "expanded" && (
+                  <span className="ml-2 truncate text-sm">
+                    {user?.email}
+                  </span>
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">Account</p>
+                  <p className="text-xs leading-none text-muted-foreground">
+                    {user?.email}
+                  </p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={signOut} className="text-red-600">
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Sign out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </SidebarContent>
+    </Sidebar>
+  );
+}
+
+export default function Layout({ children }: LayoutProps) {
+  const { user } = useAuth();
+
   if (!user) {
     return <>{children}</>;
   }
 
-  const navigation = getNavigation(userProfile?.role === 'admin');
-
   return (
-    <div className="min-h-screen bg-background">
-      {/* Top Navigation */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 items-center">
-          <Link to="/" className="flex items-center space-x-2">
-            <Dumbbell className="h-6 w-6 text-primary" />
-            <span className="font-bold">No Days Lost</span>
-          </Link>
-          
-          <nav className="flex items-center space-x-6 text-sm font-medium ml-6">
-            {navigation.map((item) => {
-              const Icon = item.icon;
-              const isActive = location.pathname === item.href;
-              const displayName = item.name === 'workoutLog' ? responsiveText.workoutLog : 
-                                 item.name === 'Generate' ? responsiveText.generate : item.name;
-              
-              return (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className={cn(
-                    'flex items-center space-x-2 transition-colors hover:text-foreground/80',
-                    isActive ? 'text-foreground' : 'text-foreground/60'
-                  )}
-                  title={item.name === 'workoutLog' ? 'Workout Log' : item.name}
-                  aria-label={item.name === 'workoutLog' ? 'Workout Log' : item.name}
-                >
-                  <Icon className="h-4 w-4" />
-                  <span className="hidden sm:inline-block">{displayName}</span>
-                </Link>
-              );
-            })}
-          </nav>
-
-          <div className="ml-auto flex items-center space-x-4">
-            <div className="flex items-center space-x-2 text-sm">
-              <User className="h-4 w-4" />
-              <span className="hidden sm:inline-block">{user.email}</span>
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full">
+        <AppSidebar />
+        
+        <div className="flex-1 flex flex-col">
+          {/* Clean minimal header */}
+          <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            <div className="flex h-14 items-center px-4">
+              <SidebarTrigger className="mr-4" />
+              <div className="flex-1" />
+              {/* Optional: Add any global actions here if needed */}
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={signOut}
-              className="flex items-center space-x-2"
-            >
-              <LogOut className="h-4 w-4" />
-              <span className="hidden sm:inline-block">Sign Out</span>
-            </Button>
-          </div>
-        </div>
-      </header>
+          </header>
 
-      {/* Main Content */}
-      <main className="container py-6">
-        {children}
-      </main>
-    </div>
+          {/* Main Content */}
+          <main className="flex-1 container py-6">
+            {children}
+          </main>
+        </div>
+      </div>
+    </SidebarProvider>
   );
 }
