@@ -34,7 +34,8 @@ interface Exercise {
 interface GeneratedSet {
   weight: number | null;
   unit: string;
-  reps: number;
+  reps?: number;
+  duration_sec?: number;
   rpe: number;
   rest_sec: number;
 }
@@ -136,15 +137,127 @@ function SortableExercise({ exercise, index, onEdit, onRemove }: {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="space-y-2">
+        <div className="space-y-3">
           {exercise.sets.map((set, setIndex) => (
-            <div key={setIndex} className="grid grid-cols-4 gap-4 items-center text-sm">
-              <span className="font-medium">Set {setIndex + 1}</span>
-              <span>{set.reps} reps</span>
-              <span>RPE {set.rpe}</span>
-              <span>{set.rest_sec}s rest</span>
+            <div key={setIndex} className="border rounded p-3 space-y-2">
+              <div className="flex justify-between items-center">
+                <span className="font-medium">Set {setIndex + 1}</span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    const updatedSets = exercise.sets.filter((_, i) => i !== setIndex);
+                    onEdit(index, { sets: updatedSets });
+                  }}
+                  className="text-destructive hover:text-destructive h-6 w-6 p-0"
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+                {set.duration_sec ? (
+                  <div className="space-y-1">
+                    <label className="text-xs text-muted-foreground">Duration</label>
+                    <Input
+                      type="number"
+                      value={set.duration_sec}
+                      onChange={(e) => {
+                        const updatedSets = [...exercise.sets];
+                        updatedSets[setIndex] = { ...set, duration_sec: parseInt(e.target.value) || 0 };
+                        onEdit(index, { sets: updatedSets });
+                      }}
+                      className="h-8"
+                      placeholder="30"
+                    />
+                    <span className="text-xs text-muted-foreground">seconds</span>
+                  </div>
+                ) : (
+                  <>
+                    <div className="space-y-1">
+                      <label className="text-xs text-muted-foreground">Weight</label>
+                      <Input
+                        type="number"
+                        value={set.weight || ''}
+                        onChange={(e) => {
+                          const updatedSets = [...exercise.sets];
+                          updatedSets[setIndex] = { ...set, weight: parseFloat(e.target.value) || null };
+                          onEdit(index, { sets: updatedSets });
+                        }}
+                        className="h-8"
+                        placeholder="0"
+                      />
+                      <span className="text-xs text-muted-foreground">{set.unit}</span>
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs text-muted-foreground">Reps</label>
+                      <Input
+                        type="number"
+                        value={set.reps || ''}
+                        onChange={(e) => {
+                          const updatedSets = [...exercise.sets];
+                          updatedSets[setIndex] = { ...set, reps: parseInt(e.target.value) || 0 };
+                          onEdit(index, { sets: updatedSets });
+                        }}
+                        className="h-8"
+                        placeholder="10"
+                      />
+                    </div>
+                  </>
+                )}
+                <div className="space-y-1">
+                  <label className="text-xs text-muted-foreground">RPE</label>
+                  <Input
+                    type="number"
+                    step="0.5"
+                    min="1"
+                    max="10"
+                    value={set.rpe}
+                    onChange={(e) => {
+                      const updatedSets = [...exercise.sets];
+                      updatedSets[setIndex] = { ...set, rpe: parseFloat(e.target.value) || 0 };
+                      onEdit(index, { sets: updatedSets });
+                    }}
+                    className="h-8"
+                    placeholder="7"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs text-muted-foreground">Rest</label>
+                  <Input
+                    type="number"
+                    value={set.rest_sec}
+                    onChange={(e) => {
+                      const updatedSets = [...exercise.sets];
+                      updatedSets[setIndex] = { ...set, rest_sec: parseInt(e.target.value) || 0 };
+                      onEdit(index, { sets: updatedSets });
+                    }}
+                    className="h-8"
+                    placeholder="90"
+                  />
+                  <span className="text-xs text-muted-foreground">seconds</span>
+                </div>
+              </div>
             </div>
           ))}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              const newSet = {
+                weight: null,
+                unit: exercise.sets[0]?.unit || 'kg',
+                reps: exercise.sets[0]?.duration_sec ? undefined : 10,
+                duration_sec: exercise.sets[0]?.duration_sec ? 30 : undefined,
+                rpe: 7,
+                rest_sec: 90
+              };
+              onEdit(index, { sets: [...exercise.sets, newSet] });
+            }}
+            className="w-full"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add Set
+          </Button>
         </div>
       </CardContent>
     </Card>

@@ -108,7 +108,9 @@ serve(async (req) => {
     - Intensity 4-5: Lower reps (6-10), shorter rests (60-90s), higher RPE (8-9)
     - Include compound movements first, then accessories
     - Match exercise selection to available equipment
-    - Keep total sets appropriate for time and intensity
+    - Default to 3 sets for weight-based exercises
+    - For bodyweight exercises like plank, wall sit, use duration_sec field instead of reps
+    - For weight/machine exercises, always include weight field (default null)
     - Default weight to null so users can fill in at gym
     - Use "kg" as default unit
 
@@ -125,8 +127,9 @@ serve(async (req) => {
             "sets": [
               {
                 "weight": null,
-                "unit": "kg",
-                "reps": number,
+                "unit": "kg", 
+                "reps": number (use for weight/machine exercises),
+                "duration_sec": number (use for bodyweight exercises like plank),
                 "rpe": number,
                 "rest_sec": number
               }
