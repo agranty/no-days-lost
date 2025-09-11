@@ -22,5 +22,8 @@ enable_confirmations = true
 [functions.admin-api]
 verify_jwt = true
 
+[functions.generate-workout]
+verify_jwt = true
+
 [functions.generate-workout-summary]
 verify_jwt = true

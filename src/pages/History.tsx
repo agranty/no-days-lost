@@ -5,7 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
-import { Dumbbell, History as HistoryIcon } from 'lucide-react';
+import { Dumbbell, History as HistoryIcon, Sparkles } from 'lucide-react';
 
 interface WorkoutData {
   date: string;
@@ -127,9 +127,15 @@ export default function History() {
             <div>
               <h3 className="text-2xl font-bold mb-3">No workouts yet</h3>
               <p className="text-muted-foreground text-lg mb-8">Start your fitness journey by logging your first workout!</p>
-              <Button onClick={() => navigate('/log')} size="lg" className="h-12 px-8">
-                Log Your First Workout
-              </Button>
+              <div className="flex gap-4 justify-center">
+                <Button onClick={() => navigate('/log')} size="lg" className="h-12 px-8">
+                  Log Your First Workout
+                </Button>
+                <Button onClick={() => navigate('/generate')} variant="outline" size="lg" className="h-12 px-8">
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  Generate AI Workout
+                </Button>
+              </div>
             </div>
           </div>
         </Card>
@@ -137,11 +143,32 @@ export default function History() {
     );
   }
 
+  // Get most recent workout's body parts for pre-filling
+  const getRecentBodyParts = () => {
+    if (workouts.length > 0) {
+      return workouts[0].body_parts || [];
+    }
+    return [];
+  };
+
+  const handleGenerateFromHistory = () => {
+    const recentBodyParts = getRecentBodyParts();
+    navigate('/generate', { state: { bodyParts: recentBodyParts } });
+  };
+
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-4xl font-bold tracking-tight">Workout History</h1>
-        <p className="text-muted-foreground text-lg">View your past workouts</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-4xl font-bold tracking-tight">Workout History</h1>
+          <p className="text-muted-foreground text-lg">View your past workouts</p>
+        </div>
+        {workouts.length > 0 && (
+          <Button onClick={handleGenerateFromHistory} variant="outline" size="lg">
+            <Sparkles className="mr-2 h-4 w-4" />
+            Generate Based on Recent Training
+          </Button>
+        )}
       </div>
 
       <div className="space-y-4">

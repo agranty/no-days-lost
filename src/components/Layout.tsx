@@ -24,6 +24,7 @@ interface LayoutProps {
 
 const getNavigation = (isAdmin: boolean) => [
   { name: 'workoutLog', href: '/log', icon: Plus },
+  { name: 'Generate', href: '/generate', icon: Dumbbell },
   { name: 'History', href: '/history', icon: History },
   { name: 'Progress', href: '/progress', icon: TrendingUp },
   { name: 'Weight', href: '/weight', icon: Weight },
@@ -75,7 +76,8 @@ export default function Layout({ children }: LayoutProps) {
             {navigation.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.href;
-              const displayName = item.name === 'workoutLog' ? responsiveText.workoutLog : item.name;
+              const displayName = item.name === 'workoutLog' ? responsiveText.workoutLog : 
+                                 item.name === 'Generate' ? responsiveText.generate : item.name;
               
               return (
                 <Link

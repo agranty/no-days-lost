@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import { useAuth } from '@/hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Save } from 'lucide-react';
+import { Save, Dumbbell } from 'lucide-react';
 import {
   DndContext,
   closestCenter,
@@ -62,6 +64,7 @@ interface WorkoutExercise {
 
 export default function LogWorkout() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [bodyParts, setBodyParts] = useState<BodyPart[]>([]);
@@ -351,6 +354,27 @@ export default function LogWorkout() {
         onBodyPartsChange={setSelectedBodyParts}
         bodyParts={bodyParts}
       />
+
+      {/* AI Workout CTA for empty state */}
+      {workoutExercises.length === 0 && (
+        <Card className="p-6 border-dashed border-2 border-primary/20 bg-primary/5">
+          <div className="text-center space-y-4">
+            <div className="rounded-full bg-primary/10 p-3 w-fit mx-auto">
+              <Dumbbell className="h-8 w-8 text-primary" />
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-2">No exercises added yet</h3>
+              <p className="text-muted-foreground mb-4">
+                Add exercises manually or let AI create a personalized workout for you
+              </p>
+              <Button onClick={() => navigate('/generate')} variant="outline" size="lg">
+                <Dumbbell className="mr-2 h-4 w-4" />
+                Generate AI Workout
+              </Button>
+            </div>
+          </div>
+        </Card>
+      )}
 
       {/* Exercise Selector - now filtered */}
       <ExerciseSelector

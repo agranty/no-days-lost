@@ -9,6 +9,7 @@ import Layout from "./components/Layout";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import LogWorkout from "./pages/LogWorkout";
+import Generate from "./pages/Generate";
 import History from "./pages/History";
 import Progress from "./pages/Progress";
 import Weight from "./pages/Weight";
@@ -32,6 +33,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/log" element={<LogWorkout />} />
+              <Route path="/generate" element={<Generate />} />
               <Route path="/history" element={<History />} />
               <Route path="/progress" element={<Progress />} />
               <Route path="/weight" element={<Weight />} />

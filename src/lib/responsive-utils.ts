@@ -7,6 +7,7 @@ export function useResponsiveText() {
   
   return {
     workoutLog: isMobile ? 'Log' : 'Workout Log',
+    generate: isMobile ? 'Gen' : 'Generate',
     repetitions: isMobile ? 'Reps' : 'Repetitions',
     personalRecord: isMobile ? 'PR' : 'Personal Record',
     workoutDuration: isMobile ? 'Duration' : 'Workout Duration',
