@@ -526,7 +526,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_profile_for_webhook: {
+        Args: { profile_id: string }
+        Returns: Json
+      }
     }
     Enums: {
       distance_unit_type: "km" | "mile"
