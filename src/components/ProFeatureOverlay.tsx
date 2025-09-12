@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -127,9 +128,41 @@ export function ProFeatureOverlay({
 
 // Hook to check if user has pro access
 export function useProAccess() {
-  // TODO: Replace with actual subscription check
-  // For now, simulate based on user plan
-  const hasProAccess = false; // This would check user.plan === 'pro' or subscription status
+  const [hasProAccess, setHasProAccess] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkProAccess = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          setHasProAccess(false);
+          setLoading(false);
+          return;
+        }
+
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('plan, subscription_status')
+          .eq('id', user.id)
+          .single();
+
+        // User has pro access if they have an active pro subscription
+        const isPro = profile?.plan === 'pro' && 
+                     (profile?.subscription_status === 'active' || 
+                      profile?.subscription_status === 'trialing');
+        
+        setHasProAccess(isPro);
+      } catch (error) {
+        console.error('Error checking pro access:', error);
+        setHasProAccess(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkProAccess();
+  }, []);
   
-  return { hasProAccess };
+  return { hasProAccess, loading };
 }

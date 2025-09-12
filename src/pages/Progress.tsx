@@ -11,7 +11,22 @@ import CalendarTab from '@/components/progress/CalendarTab';
 
 export default function Progress() {
   const [activeTab, setActiveTab] = useState('strength');
-  const { hasProAccess } = useProAccess();
+  const { hasProAccess, loading } = useProAccess();
+
+  // Show loading state while checking pro access
+  if (loading) {
+    return (
+      <div className="space-y-8">
+        <div>
+          <h1 className="text-4xl font-bold tracking-tight">Progress Analytics</h1>
+          <p className="text-muted-foreground text-lg">Track your improvements across different areas</p>
+        </div>
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
