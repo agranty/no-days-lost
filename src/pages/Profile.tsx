@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -16,7 +16,7 @@ interface ProfileData {
   display_name: string;
   birthday_month: number | null;
   birthday_day: number | null;
-  goal: string;
+  goals: string[];
 }
 
 export default function Profile() {
@@ -29,7 +29,7 @@ export default function Profile() {
     display_name: '',
     birthday_month: null,
     birthday_day: null,
-    goal: ''
+    goals: []
   });
   const [otherGoal, setOtherGoal] = useState('');
 
@@ -85,17 +85,33 @@ export default function Profile() {
       if (error) throw error;
 
       if (data) {
+        // Parse goals from stored format (could be JSON array or comma-separated string)
+        let goals: string[] = [];
+        if (data.goal) {
+          try {
+            // Try parsing as JSON array first
+            goals = JSON.parse(data.goal);
+          } catch {
+            // Fallback to comma-separated string
+            goals = data.goal.split(',').map((g: string) => g.trim()).filter(Boolean);
+          }
+        }
+
         setFormData({
           display_name: data.display_name || '',
           birthday_month: data.birthday_month,
           birthday_day: data.birthday_day,
-          goal: data.goal || ''
+          goals: goals
         });
 
-        // If goal is not in predefined options, set it as "Other"
-        if (data.goal && !goalOptions.slice(0, -1).includes(data.goal)) {
-          setOtherGoal(data.goal);
-          setFormData(prev => ({ ...prev, goal: 'Other' }));
+        // If any goal is not in predefined options, add it to "Other"
+        const unknownGoals = goals.filter(goal => !goalOptions.slice(0, -1).includes(goal));
+        if (unknownGoals.length > 0) {
+          setOtherGoal(unknownGoals.join(', '));
+          setFormData(prev => ({ 
+            ...prev, 
+            goals: [...goals.filter(goal => goalOptions.slice(0, -1).includes(goal)), 'Other']
+          }));
         }
       }
     } catch (error) {
@@ -134,18 +150,25 @@ export default function Profile() {
       return;
     }
 
-    if (!formData.goal) {
+    if (!formData.goals || formData.goals.length === 0) {
       toast({
         variant: 'destructive',
         title: 'Validation Error',
-        description: 'Please select a goal.'
+        description: 'Please select at least one goal.'
       });
       return;
     }
 
     setSaving(true);
     try {
-      const goalValue = formData.goal === 'Other' ? otherGoal : formData.goal;
+      // Prepare goals for storage
+      let goalValue = formData.goals.filter(goal => goal !== 'Other');
+      if (formData.goals.includes('Other') && otherGoal.trim()) {
+        goalValue.push(otherGoal.trim());
+      }
+      
+      // Store as JSON array
+      const goalString = JSON.stringify(goalValue);
 
       const { error } = await supabase
         .from('profiles')
@@ -153,7 +176,7 @@ export default function Profile() {
           display_name: formData.display_name || null,
           birthday_month: formData.birthday_month,
           birthday_day: formData.birthday_day,
-          goal: goalValue,
+          goal: goalString,
           updated_at: new Date().toISOString()
         })
         .eq('id', user.id);
@@ -296,15 +319,27 @@ export default function Profile() {
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-4">
-              <Label>What do you want from this app?</Label>
-              <RadioGroup
-                value={formData.goal}
-                onValueChange={(value) => setFormData(prev => ({ ...prev, goal: value }))}
-                className="space-y-3"
-              >
+              <Label>What do you want from this app? (Select all that apply)</Label>
+              <div className="space-y-3">
                 {goalOptions.map((option) => (
                   <div key={option} className="flex items-center space-x-2">
-                    <RadioGroupItem value={option} id={option} />
+                    <Checkbox
+                      id={option}
+                      checked={formData.goals.includes(option)}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          setFormData(prev => ({
+                            ...prev,
+                            goals: [...prev.goals, option]
+                          }));
+                        } else {
+                          setFormData(prev => ({
+                            ...prev,
+                            goals: prev.goals.filter(goal => goal !== option)
+                          }));
+                        }
+                      }}
+                    />
                     <Label 
                       htmlFor={option}
                       className="text-sm font-normal cursor-pointer flex-1"
@@ -313,15 +348,15 @@ export default function Profile() {
                     </Label>
                   </div>
                 ))}
-              </RadioGroup>
+              </div>
 
               {/* Other goal text input */}
-              {formData.goal === 'Other' && (
+              {formData.goals.includes('Other') && (
                 <div className="mt-4 ml-6">
                   <Textarea
                     value={otherGoal}
                     onChange={(e) => setOtherGoal(e.target.value)}
-                    placeholder="Describe your specific goal..."
+                    placeholder="Describe your specific goals..."
                     className="resize-none"
                     rows={3}
                   />
