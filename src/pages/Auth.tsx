@@ -140,7 +140,7 @@ export default function Auth() {
             <img 
               src="/lovable-uploads/810109da-95f8-4bd2-8e44-0c79a9cfa2a2.png" 
               alt="No Days Lost" 
-              className="h-20 w-auto object-contain"
+              className="h-32 w-auto object-contain"
             />
           </div>
           <div>
