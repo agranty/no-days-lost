@@ -160,6 +160,12 @@ function AppSidebar() {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link to="/profile" className="flex items-center w-full">
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Profile</span>
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={signOut} className="text-red-600">
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Sign out</span>
