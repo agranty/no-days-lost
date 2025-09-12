@@ -37,7 +37,8 @@ import {
   Shield,
   Wand2,
   Menu,
-  Home
+  Home,
+  Zap
 } from 'lucide-react';
 
 interface LayoutProps {
@@ -46,6 +47,7 @@ interface LayoutProps {
 
 const getNavigation = (isAdmin: boolean) => [
   { title: 'Dashboard', href: '/', icon: Home },
+  { title: 'Welcome', href: '/welcome', icon: Zap },
   { title: 'Add Workout', href: '/log', icon: Plus },
   { title: 'Generate', href: '/generate', icon: Wand2 },
   { title: 'History', href: '/history', icon: History },

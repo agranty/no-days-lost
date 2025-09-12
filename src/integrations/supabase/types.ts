@@ -312,6 +312,7 @@ export type Database = {
           email: string
           id: string
           last_login_at: string | null
+          last_welcome_seen_at: string | null
           plan: string
           role: string
           stripe_customer_id: string | null
@@ -324,6 +325,7 @@ export type Database = {
           email: string
           id: string
           last_login_at?: string | null
+          last_welcome_seen_at?: string | null
           plan?: string
           role?: string
           stripe_customer_id?: string | null
@@ -336,6 +338,7 @@ export type Database = {
           email?: string
           id?: string
           last_login_at?: string | null
+          last_welcome_seen_at?: string | null
           plan?: string
           role?: string
           stripe_customer_id?: string | null
