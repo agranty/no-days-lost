@@ -6,6 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { Dumbbell, History as HistoryIcon, Sparkles } from 'lucide-react';
+import { ProFeatureOverlay, useProAccess } from '@/components/ProFeatureOverlay';
 
 interface WorkoutData {
   date: string;
@@ -20,6 +21,7 @@ export default function History() {
   const [workouts, setWorkouts] = useState<WorkoutData[]>([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const { hasProAccess, loading: proLoading } = useProAccess();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -93,7 +95,7 @@ export default function History() {
     navigate(`/workouts/${date}`);
   };
 
-  if (loading) {
+  if (loading || proLoading) {
     return (
       <div className="space-y-8">
         <div>
@@ -172,42 +174,65 @@ export default function History() {
       </div>
 
       <div className="space-y-4">
-        {workouts.map((workout, index) => (
-          <Card 
-            key={`${workout.date}-${index}`}
-            className="cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-[1.005] border-0 shadow-sm bg-card/50"
-            onClick={() => handleWorkoutClick(workout.date)}
-          >
-            <CardContent className="p-8">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-8 flex-1">
-                  <div className="font-bold text-xl min-w-[160px] text-primary">
-                    {format(new Date(workout.date), 'MMM dd, yyyy')}
+        {workouts.map((workout, index) => {
+          // Check if this workout is older than 2 days for pro restriction
+          const workoutDate = new Date(workout.date);
+          const twoDaysAgo = new Date();
+          twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+          const isOlderThanTwoDays = workoutDate < twoDaysAgo;
+          
+          const workoutCard = (
+            <Card 
+              key={`${workout.date}-${index}`}
+              className="cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-[1.005] border-0 shadow-sm bg-card/50"
+              onClick={() => handleWorkoutClick(workout.date)}
+            >
+              <CardContent className="p-8">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-8 flex-1">
+                    <div className="font-bold text-xl min-w-[160px] text-primary">
+                      {format(new Date(workout.date), 'MMM dd, yyyy')}
+                    </div>
+                    <div className="text-muted-foreground max-w-[240px] truncate text-lg">
+                      {workout.workout_type}
+                    </div>
+                    <div className="text-muted-foreground">
+                      {workout.body_parts.join(', ')}
+                    </div>
+                    <div>
+                      {workout.rpe > 0 ? (
+                        <span className="bg-primary/15 text-primary px-3 py-1.5 rounded-full text-sm font-semibold">
+                          RPE {workout.rpe}
+                        </span>
+                      ) : (
+                        <span className="text-muted-foreground">-</span>
+                      )}
+                    </div>
                   </div>
-                  <div className="text-muted-foreground max-w-[240px] truncate text-lg">
-                    {workout.workout_type}
-                  </div>
-                  <div className="text-muted-foreground">
-                    {workout.body_parts.join(', ')}
-                  </div>
-                  <div>
-                    {workout.rpe > 0 ? (
-                      <span className="bg-primary/15 text-primary px-3 py-1.5 rounded-full text-sm font-semibold">
-                        RPE {workout.rpe}
-                      </span>
-                    ) : (
-                      <span className="text-muted-foreground">-</span>
-                    )}
+                  <div className="text-right text-muted-foreground space-y-2">
+                    <div className="font-semibold text-lg">{workout.exercise_count} exercises</div>
+                    {workout.duration && <div className="text-sm">{workout.duration} minutes</div>}
                   </div>
                 </div>
-                <div className="text-right text-muted-foreground space-y-2">
-                  <div className="font-semibold text-lg">{workout.exercise_count} exercises</div>
-                  {workout.duration && <div className="text-sm">{workout.duration} minutes</div>}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+              </CardContent>
+            </Card>
+          );
+
+          // Wrap older workouts in pro overlay for free users
+          if (!hasProAccess && isOlderThanTwoDays) {
+            return (
+              <ProFeatureOverlay 
+                key={`${workout.date}-${index}`}
+                feature="Access full workout history beyond 2 days with detailed exercise tracking"
+                blurIntensity="medium"
+              >
+                {workoutCard}
+              </ProFeatureOverlay>
+            );
+          }
+
+          return workoutCard;
+        })}
       </div>
     </div>
   );

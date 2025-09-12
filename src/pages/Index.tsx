@@ -7,15 +7,17 @@ import { useResponsiveText } from '@/lib/responsive-utils';
 import { Dumbbell, Plus, History, TrendingUp, Weight, Target, Footprints, Clock } from 'lucide-react';
 import RecentWorkouts from '@/components/RecentWorkouts';
 import WeightTracker from '@/components/WeightTracker';
+import { ProFeatureOverlay, useProAccess } from '@/components/ProFeatureOverlay';
 
 const Index = () => {
   const { user, loading } = useAuth();
+  const { hasProAccess, loading: proLoading } = useProAccess();
   const responsiveText = useResponsiveText();
   
   // Handle welcome page redirect for first daily visit
   // useWelcomeRedirect();
 
-  if (loading) {
+  if (loading || proLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -257,7 +259,16 @@ const Index = () => {
 
       {/* Recent Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <RecentWorkouts />
+        {hasProAccess ? (
+          <RecentWorkouts />
+        ) : (
+          <ProFeatureOverlay 
+            feature="Full workout history with AI-powered summaries and detailed analytics"
+            blurIntensity="medium"
+          >
+            <RecentWorkouts />
+          </ProFeatureOverlay>
+        )}
         <WeightTracker />
       </div>
     </div>
