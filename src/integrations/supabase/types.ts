@@ -307,9 +307,13 @@ export type Database = {
       }
       profiles: {
         Row: {
+          birthday_day: number | null
+          birthday_month: number | null
           created_at: string
           current_period_end: string | null
+          display_name: string | null
           email: string
+          goal: string | null
           id: string
           last_login_at: string | null
           last_welcome_seen_at: string | null
@@ -320,9 +324,13 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          birthday_day?: number | null
+          birthday_month?: number | null
           created_at?: string
           current_period_end?: string | null
+          display_name?: string | null
           email: string
+          goal?: string | null
           id: string
           last_login_at?: string | null
           last_welcome_seen_at?: string | null
@@ -333,9 +341,13 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          birthday_day?: number | null
+          birthday_month?: number | null
           created_at?: string
           current_period_end?: string | null
+          display_name?: string | null
           email?: string
+          goal?: string | null
           id?: string
           last_login_at?: string | null
           last_welcome_seen_at?: string | null
