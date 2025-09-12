@@ -32,7 +32,7 @@ const Index = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-4xl font-bold tracking-tight">Dashboard</h1>
-          <p className="text-muted-foreground text-lg">Track your fitness journey</p>
+          <p className="text-muted-foreground text-lg">Consistency Creates Progress</p>
         </div>
         <Button variant="outline" size="sm" className="h-10 px-4">
           View All
