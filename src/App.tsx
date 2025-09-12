@@ -9,6 +9,7 @@ import Layout from "./components/Layout";
 import Index from "./pages/Index";
 import Welcome from "./pages/Welcome";
 import Profile from "./pages/Profile";
+import Upgrade from "./pages/Upgrade";
 import Auth from "./pages/Auth";
 import LogWorkout from "./pages/LogWorkout";
 import Generate from "./pages/Generate";
@@ -35,6 +36,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/welcome" element={<Welcome />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/upgrade" element={<Upgrade />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/log" element={<LogWorkout />} />
               <Route path="/generate" element={<Generate />} />

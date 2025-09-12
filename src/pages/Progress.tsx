@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { TrendingUp, Target, Heart, Weight, Calendar } from 'lucide-react';
+import { TrendingUp, Target, Heart, Weight, Calendar, Lock } from 'lucide-react';
+import { ProFeatureOverlay, useProAccess } from '@/components/ProFeatureOverlay';
 import StrengthTab from '@/components/progress/StrengthTab';
 import BodyPartsTab from '@/components/progress/BodyPartsTab';
 import CardioTab from '@/components/progress/CardioTab';
@@ -10,6 +11,7 @@ import CalendarTab from '@/components/progress/CalendarTab';
 
 export default function Progress() {
   const [activeTab, setActiveTab] = useState('strength');
+  const { hasProAccess } = useProAccess();
 
   return (
     <div className="space-y-8">
@@ -47,15 +49,42 @@ export default function Progress() {
         </Card>
 
         <TabsContent value="strength" className="space-y-0">
-          <StrengthTab />
+          {hasProAccess ? (
+            <StrengthTab />
+          ) : (
+            <ProFeatureOverlay 
+              feature="Detailed strength progression charts with 1RM tracking and historical analysis"
+              blurIntensity="light"
+            >
+              <StrengthTab />
+            </ProFeatureOverlay>
+          )}
         </TabsContent>
 
         <TabsContent value="bodyparts" className="space-y-0">
-          <BodyPartsTab />
+          {hasProAccess ? (
+            <BodyPartsTab />
+          ) : (
+            <ProFeatureOverlay 
+              feature="Complete body part analysis with muscle group breakdown and imbalance detection"
+              blurIntensity="light"
+            >
+              <BodyPartsTab />
+            </ProFeatureOverlay>
+          )}
         </TabsContent>
 
         <TabsContent value="cardio" className="space-y-0">
-          <CardioTab />
+          {hasProAccess ? (
+            <CardioTab />
+          ) : (
+            <ProFeatureOverlay 
+              feature="Full cardio history with pace trends, distance tracking, and performance insights"
+              blurIntensity="light"
+            >
+              <CardioTab />
+            </ProFeatureOverlay>
+          )}
         </TabsContent>
 
         <TabsContent value="weight" className="space-y-0">
