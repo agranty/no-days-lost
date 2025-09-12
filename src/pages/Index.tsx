@@ -2,7 +2,7 @@ import { Navigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
-import { useWelcomeRedirect } from '@/hooks/useWelcomeRedirect';
+// import { useWelcomeRedirect } from '@/hooks/useWelcomeRedirect';
 import { useResponsiveText } from '@/lib/responsive-utils';
 import { Dumbbell, Plus, History, TrendingUp, Weight, Target, Footprints, Clock } from 'lucide-react';
 import RecentWorkouts from '@/components/RecentWorkouts';
@@ -13,7 +13,7 @@ const Index = () => {
   const responsiveText = useResponsiveText();
   
   // Handle welcome page redirect for first daily visit
-  useWelcomeRedirect();
+  // useWelcomeRedirect();
 
   if (loading) {
     return (

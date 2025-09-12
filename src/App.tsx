@@ -8,7 +8,7 @@ import { AuthProvider } from "./hooks/useAuth";
 import Layout from "./components/Layout";
 import Index from "./pages/Index";
 import Welcome from "./pages/Welcome";
-import Profile from "./pages/Profile";
+import TestProfile from "./pages/TestProfile";
 import Auth from "./pages/Auth";
 import LogWorkout from "./pages/LogWorkout";
 import Generate from "./pages/Generate";
@@ -34,7 +34,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/welcome" element={<Welcome />} />
-              <Route path="/profile" element={<Profile />} />
+              <Route path="/profile" element={<TestProfile />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/log" element={<LogWorkout />} />
               <Route path="/generate" element={<Generate />} />
