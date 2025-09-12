@@ -13,7 +13,12 @@ export function useWelcomeRedirect() {
       return;
     }
 
-    checkShouldShowWelcome();
+    // Use a timeout to ensure all components are mounted
+    const timeoutId = setTimeout(() => {
+      checkShouldShowWelcome();
+    }, 100);
+
+    return () => clearTimeout(timeoutId);
   }, [user, location.pathname]);
 
   const checkShouldShowWelcome = async () => {
