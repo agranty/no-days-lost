@@ -89,9 +89,11 @@ export default function Auth() {
         <Card className="w-full max-w-lg shadow-lg border-0 bg-card/95 backdrop-blur-sm">
           <CardHeader className="text-center space-y-6 pb-8">
             <div className="flex justify-center">
-              <div className="rounded-full bg-gradient-to-r from-primary to-accent p-4">
-                <Dumbbell className="h-10 w-10 text-white" />
-              </div>
+              <img 
+                src="/lovable-uploads/810109da-95f8-4bd2-8e44-0c79a9cfa2a2.png" 
+                alt="No Days Lost" 
+                className="h-16 w-auto object-contain"
+              />
             </div>
             <div>
               <CardTitle className="text-3xl font-bold">Reset Password</CardTitle>
@@ -135,13 +137,14 @@ export default function Auth() {
       <Card className="w-full max-w-lg shadow-lg border-0 bg-card/95 backdrop-blur-sm">
         <CardHeader className="text-center space-y-6 pb-8">
           <div className="flex justify-center">
-            <div className="rounded-full bg-gradient-to-r from-primary to-accent p-4">
-              <Dumbbell className="h-10 w-10 text-white" />
-            </div>
+            <img 
+              src="/lovable-uploads/810109da-95f8-4bd2-8e44-0c79a9cfa2a2.png" 
+              alt="No Days Lost" 
+              className="h-20 w-auto object-contain"
+            />
           </div>
           <div>
-            <CardTitle className="text-4xl font-bold">No Days Lost</CardTitle>
-            <CardDescription className="text-lg mt-2">Your fitness journey starts here</CardDescription>
+            <CardDescription className="text-lg mt-2">Consistency Creates Progress</CardDescription>
           </div>
         </CardHeader>
         <CardContent className="space-y-8 pb-8">
