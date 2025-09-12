@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { Dumbbell, History as HistoryIcon, Sparkles } from 'lucide-react';
 import { ProFeatureOverlay, useProAccess } from '@/components/ProFeatureOverlay';
+import { ResponsiveDate } from '@/components/ui/responsive-date';
+import { ResponsiveLabel } from '@/components/ui/responsive-label';
 
 interface WorkoutData {
   date: string;
@@ -189,15 +191,21 @@ export default function History() {
             >
               <CardContent className="p-8">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-8 flex-1">
-                    <div className="font-bold text-xl min-w-[160px] text-primary">
-                      {format(new Date(workout.date), 'MMM dd, yyyy')}
+                  <div className="flex items-center space-x-4 lg:space-x-8 flex-1 min-w-0">
+                    <div className="font-bold text-xl min-w-0 text-primary flex-shrink-0">
+                      <ResponsiveDate date={workout.date} />
                     </div>
-                    <div className="text-muted-foreground max-w-[240px] truncate text-lg">
-                      {workout.workout_type}
+                    <div className="text-muted-foreground min-w-0 flex-1 text-lg">
+                      <ResponsiveLabel 
+                        text={workout.workout_type} 
+                        maxLength={{ sm: 10, md: 15, lg: 25 }}
+                      />
                     </div>
-                    <div className="text-muted-foreground">
-                      {workout.body_parts.join(', ')}
+                    <div className="text-muted-foreground min-w-0 hidden md:block">
+                      <ResponsiveLabel 
+                        text={workout.body_parts.join(', ')} 
+                        maxLength={{ sm: 15, md: 20, lg: 30 }}
+                      />
                     </div>
                     <div>
                       {workout.rpe > 0 ? (

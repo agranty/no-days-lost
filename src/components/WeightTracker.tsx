@@ -4,8 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Weight, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
-import { format, parseISO, subDays } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { Link } from 'react-router-dom';
+import { ResponsiveDate } from '@/components/ui/responsive-date';
 
 interface WeightData {
   current: number | null;
@@ -131,7 +132,7 @@ export default function WeightTracker() {
             </div>
             {weightData.date && (
               <div className="text-sm text-muted-foreground">
-                {format(parseISO(weightData.date), 'MMM dd, yyyy')}
+                <ResponsiveDate date={weightData.date} format="medium" />
               </div>
             )}
             {weightData.trend && (

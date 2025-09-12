@@ -7,6 +7,8 @@ import { Trophy, TrendingUp } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { format, parseISO } from 'date-fns';
+import { ResponsiveDate } from '@/components/ui/responsive-date';
+import { ResponsiveLabel } from '@/components/ui/responsive-label';
 
 interface ExerciseData {
   id: string;
@@ -339,15 +341,18 @@ export default function StrengthTab() {
                     .slice(-5)
                     .map((pr, index) => (
                       <div key={index} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                        <div>
+                        <div className="min-w-0 flex-1">
                           <div className="font-medium">
-                            {format(parseISO(pr.date), 'MMM dd, yyyy')}
+                            <ResponsiveDate date={pr.date} />
                           </div>
                           <div className="text-sm text-muted-foreground">
-                            Est. 1RM: {pr.oneRM.toFixed(1)} lb • Top Set: {pr.topSetWeight.toFixed(1)}×{pr.topSetReps}
+                            <ResponsiveLabel 
+                              text={`Est. 1RM: ${pr.oneRM.toFixed(1)} lb • Top Set: ${pr.topSetWeight.toFixed(1)}×${pr.topSetReps}`}
+                              maxLength={{ sm: 25, md: 35, lg: 50 }}
+                            />
                           </div>
                         </div>
-                        <Badge variant="secondary" className="text-yellow-600">
+                        <Badge variant="secondary" className="text-yellow-600 flex-shrink-0">
                           <Trophy className="h-3 w-3 mr-1" />
                           PR
                         </Badge>

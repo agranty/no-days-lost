@@ -112,3 +112,6 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+/* Import responsive fixes */
+@import './styles/responsive-fixes.css';

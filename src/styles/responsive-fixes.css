@@ -1,0 +1,121 @@
+/* Global responsive date and label fixes */
+
+/* Ensure all containers have proper overflow handling */
+.container, .card, .flex > * {
+  min-width: 0; /* Allow flex items to shrink */
+}
+
+/* Responsive date formatting */
+.responsive-date {
+  @apply transition-all;
+}
+
+.responsive-date .short {
+  @apply block sm:hidden;
+}
+
+.responsive-date .medium {
+  @apply hidden sm:block lg:hidden;
+}
+
+.responsive-date .long {
+  @apply hidden lg:block;
+}
+
+/* Responsive label truncation */
+.responsive-label {
+  @apply transition-all;
+}
+
+.responsive-label.truncated {
+  @apply cursor-help;
+}
+
+/* Responsive table cells */
+.responsive-table td, .responsive-table th {
+  @apply min-w-0 text-ellipsis overflow-hidden;
+}
+
+/* Mobile date picker improvements */
+@media (max-width: 640px) {
+  .date-picker-trigger {
+    @apply text-sm px-2 py-1;
+  }
+  
+  .date-picker-trigger .icon {
+    @apply h-3 w-3;
+  }
+}
+
+/* Form label responsive behavior */
+.form-label {
+  @apply text-sm sm:text-base;
+}
+
+/* Card content responsive spacing */
+.card-responsive {
+  @apply p-3 sm:p-4 lg:p-6;
+}
+
+/* Responsive button text */
+.btn-responsive .btn-text-mobile {
+  @apply block sm:hidden;
+}
+
+.btn-responsive .btn-text-desktop {
+  @apply hidden sm:block;
+}
+
+/* Tooltip content max width */
+.tooltip-content {
+  @apply max-w-xs break-words;
+}
+
+/* Responsive grid adjustments */
+.responsive-grid {
+  @apply grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+}
+
+/* History item responsive layout */
+.history-item {
+  @apply flex-col sm:flex-row;
+}
+
+.history-item .date {
+  @apply mb-2 sm:mb-0 sm:mr-4 flex-shrink-0;
+}
+
+.history-item .content {
+  @apply min-w-0 flex-1;
+}
+
+/* Workout card responsive layout */
+.workout-card {
+  @apply space-y-2 sm:space-y-0 sm:space-x-4 sm:flex sm:items-center;
+}
+
+.workout-card .workout-date {
+  @apply flex-shrink-0 font-medium;
+}
+
+.workout-card .workout-details {
+  @apply min-w-0 flex-1 space-y-1 sm:space-y-0 sm:space-x-2 sm:flex;
+}
+
+/* Progress charts responsive sizing */
+.chart-container {
+  @apply h-48 sm:h-64 lg:h-80;
+}
+
+/* Weight entry responsive layout */
+.weight-entry {
+  @apply flex-col sm:flex-row sm:items-center sm:justify-between;
+}
+
+.weight-entry .weight-info {
+  @apply mb-2 sm:mb-0 min-w-0 flex-1;
+}
+
+.weight-entry .weight-actions {
+  @apply flex gap-2 flex-shrink-0;
+}

@@ -16,6 +16,8 @@ import { format, parseISO, isSameDay } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { ResponsiveDate } from '@/components/ui/responsive-date';
+import { ResponsiveLabel } from '@/components/ui/responsive-label';
 
 interface WeightEntry {
   id: string;
@@ -166,8 +168,8 @@ export default function Weight() {
   };
 
   const formatDateDisplay = (dateString: string): string => {
-    const date = parseISO(dateString);
-    return isMobile ? format(date, 'MM/dd/yy') : format(date, 'MMMM d, yyyy');
+    // This is now handled by ResponsiveDate component
+    return dateString;
   };
 
   const handleQuickSave = async (overwrite: boolean = false) => {
@@ -222,7 +224,7 @@ export default function Weight() {
 
       toast({
         title: 'Weight saved',
-        description: `${formatWeight(weightValue)} ${quickEntryUnit} logged for ${formatDateDisplay(format(quickEntryDate, 'yyyy-MM-dd'))}`
+        description: `${formatWeight(weightValue)} ${quickEntryUnit} logged for ${format(quickEntryDate, 'MMM d, yyyy')}`
       });
 
       // Reset form
@@ -474,7 +476,7 @@ export default function Weight() {
           <AlertDialogHeader>
             <AlertDialogTitle>Entry Already Exists</AlertDialogTitle>
             <AlertDialogDescription>
-              You already have a weight entry for {duplicateEntry && formatDateDisplay(duplicateEntry.date)}. 
+              You already have a weight entry for <ResponsiveDate date={duplicateEntry.date} format="medium" showTooltip={false} />. 
               Would you like to overwrite it?
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -547,9 +549,9 @@ export default function Weight() {
             <div className="space-y-2">
               {weightEntries.map((entry) => (
                 <div key={entry.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/30 transition-colors">
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0"> {/* min-w-0 allows flex child to shrink */}
                     <div className="font-medium">
-                      {formatDateDisplay(entry.date)}
+                      <ResponsiveDate date={entry.date} />
                     </div>
                     {editingId === entry.id ? (
                       <div className="mt-2 space-y-2">
@@ -585,7 +587,10 @@ export default function Weight() {
                         </div>
                         {entry.notes && (
                           <div className="text-sm text-muted-foreground mt-1">
-                            {entry.notes}
+                            <ResponsiveLabel 
+                              text={entry.notes} 
+                              maxLength={{ sm: 20, md: 40, lg: 60 }}
+                            />
                           </div>
                         )}
                       </>
@@ -632,10 +637,10 @@ export default function Weight() {
                           <AlertDialogContent>
                             <AlertDialogHeader>
                               <AlertDialogTitle>Delete Entry</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                Are you sure you want to delete this weight entry from {formatDateDisplay(entry.date)}?
-                                This action cannot be undone.
-                              </AlertDialogDescription>
+                            <AlertDialogDescription>
+                              Are you sure you want to delete this weight entry from <ResponsiveDate date={entry.date} format="medium" showTooltip={false} />?
+                              This action cannot be undone.
+                            </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                               <AlertDialogCancel>Cancel</AlertDialogCancel>

@@ -28,6 +28,8 @@ import SessionNotes from '@/components/workout/SessionNotes';
 import WorkoutDuration from '@/components/workout/WorkoutDuration';
 import { MindsetTracker } from '@/components/MindsetTracker';
 import { ProFeatureOverlay, useProAccess } from '@/components/ProFeatureOverlay';
+import { ResponsiveDate } from '@/components/ui/responsive-date';
+import { ResponsiveLabel } from '@/components/ui/responsive-label';
 
 interface Exercise {
   id: string;
