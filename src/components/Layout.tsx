@@ -87,8 +87,19 @@ function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="flex items-center space-x-2 px-2">
-            <Dumbbell className="h-5 w-5 text-primary" />
-            {state === "expanded" && <span className="font-bold">No Days Lost</span>}
+            {state === "expanded" ? (
+              <img 
+                src="/lovable-uploads/810109da-95f8-4bd2-8e44-0c79a9cfa2a2.png" 
+                alt="No Days Lost" 
+                className="h-8 w-auto object-contain"
+              />
+            ) : (
+              <img 
+                src="/lovable-uploads/8e77a1a0-58bb-45aa-9fc9-d0297bffb73f.png" 
+                alt="No Days Lost" 
+                className="h-6 w-6 object-contain"
+              />
+            )}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
