@@ -36,7 +36,8 @@ import {
   LogOut,
   Shield,
   Wand2,
-  Menu
+  Menu,
+  Home
 } from 'lucide-react';
 
 interface LayoutProps {
@@ -44,7 +45,8 @@ interface LayoutProps {
 }
 
 const getNavigation = (isAdmin: boolean) => [
-  { title: 'Workout Log', href: '/log', icon: Plus },
+  { title: 'Dashboard', href: '/', icon: Home },
+  { title: 'Add Workout', href: '/log', icon: Plus },
   { title: 'Generate', href: '/generate', icon: Wand2 },
   { title: 'History', href: '/history', icon: History },
   { title: 'Progress', href: '/progress', icon: TrendingUp },
