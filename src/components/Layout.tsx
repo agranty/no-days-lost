@@ -47,7 +47,6 @@ interface LayoutProps {
 
 const getNavigation = (isAdmin: boolean) => [
   { title: 'Dashboard', href: '/', icon: Home },
-  { title: 'Welcome', href: '/welcome', icon: Zap },
   { title: 'Add Workout', href: '/log', icon: Plus },
   { title: 'Generate', href: '/generate', icon: Wand2 },
   { title: 'History', href: '/history', icon: History },
@@ -91,7 +90,7 @@ function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="flex items-center space-x-2 px-2">
-            <Link to="/" className="flex items-center">
+            <Link to="/welcome" className="flex items-center">
               {state === "expanded" ? (
                 <img 
                   src="/lovable-uploads/810109da-95f8-4bd2-8e44-0c79a9cfa2a2.png" 
@@ -145,7 +144,7 @@ function AppSidebar() {
                 <User className="h-4 w-4" />
                 {state === "expanded" && (
                   <span className="ml-2 truncate text-sm">
-                    {user?.email}
+                    {userProfile?.display_name || user?.email}
                   </span>
                 )}
               </Button>
@@ -155,7 +154,7 @@ function AppSidebar() {
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-medium leading-none">Account</p>
                   <p className="text-xs leading-none text-muted-foreground">
-                    {user?.email}
+                    {userProfile?.display_name || user?.email}
                   </p>
                 </div>
               </DropdownMenuLabel>

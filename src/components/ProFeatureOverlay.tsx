@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Link } from 'react-router-dom';
-import { Lock, Zap, TrendingUp, Target, Crown } from 'lucide-react';
+import { Lock, Zap, TrendingUp, Target, Crown, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ProFeatureOverlayProps {
@@ -38,6 +38,7 @@ export function ProFeatureOverlay({
   blurIntensity = 'medium'
 }: ProFeatureOverlayProps) {
   const [tagline, setTagline] = useState('');
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     setTagline(getRandomTagline());
@@ -49,6 +50,10 @@ export function ProFeatureOverlay({
     heavy: 'backdrop-blur-lg'
   }[blurIntensity];
 
+  if (!isVisible) {
+    return <>{children}</>;
+  }
+
   return (
     <div className={cn("relative", className)}>
       {/* Blurred Content */}
@@ -59,6 +64,15 @@ export function ProFeatureOverlay({
       {/* Overlay */}
       <div className="absolute inset-0 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4">
         <Card className="w-full max-w-md shadow-xl border-2 border-primary/20 bg-card/95 backdrop-blur-sm">
+          {/* Close Button */}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="absolute top-2 right-2 h-8 w-8 p-0 hover:bg-muted"
+            onClick={() => setIsVisible(false)}
+          >
+            <X className="h-4 w-4" />
+          </Button>
           <CardContent className="p-8 text-center space-y-6">
             {/* Lock Icon with Crown */}
             <div className="relative mx-auto w-fit">

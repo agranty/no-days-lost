@@ -7,6 +7,7 @@ import { useResponsiveText } from '@/lib/responsive-utils';
 import { Dumbbell, Plus, History, TrendingUp, Weight, Target, Footprints, Clock } from 'lucide-react';
 import RecentWorkouts from '@/components/RecentWorkouts';
 import WeightTracker from '@/components/WeightTracker';
+import { StreakCounter } from '@/components/StreakCounter';
 import { ProFeatureOverlay, useProAccess } from '@/components/ProFeatureOverlay';
 
 const Index = () => {
@@ -191,26 +192,7 @@ const Index = () => {
 
       {/* Activity Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card className="border-0 shadow-sm">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <div className="rounded-full bg-accent/10 p-2">
-                  <Footprints className="h-5 w-5 text-accent" />
-                </div>
-                <span className="font-semibold text-lg">Daily Steps</span>
-              </div>
-              <Plus className="h-4 w-4 text-muted-foreground cursor-pointer hover:text-primary transition-colors" />
-            </div>
-            <div className="space-y-3">
-              <div className="text-3xl font-bold">0</div>
-              <div className="text-sm text-muted-foreground">Goal: 10,000 steps</div>
-              <div className="w-full bg-muted rounded-full h-2">
-                <div className="bg-accent h-2 rounded-full w-0 transition-all duration-300"></div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <StreakCounter />
 
         <Card className="border-0 shadow-sm">
           <CardContent className="p-6">

@@ -20,6 +20,8 @@ import Admin from "./pages/Admin";
 import AdminUsers from "./pages/AdminUsers";
 import AdminBilling from "./pages/AdminBilling";
 import AdminMetrics from "./pages/AdminMetrics";
+import Marketing from "./pages/Marketing";
+import Compare from "./pages/Compare";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -47,6 +49,8 @@ const App = () => (
               <Route path="/admin/users" element={<AdminUsers />} />
               <Route path="/admin/billing" element={<AdminBilling />} />
               <Route path="/admin/metrics" element={<AdminMetrics />} />
+              <Route path="/marketing" element={<Marketing />} />
+              <Route path="/compare" element={<Compare />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

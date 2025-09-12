@@ -26,6 +26,8 @@ import ExerciseSelector from '@/components/workout/ExerciseSelector';
 import DraggableExerciseCard from '@/components/workout/DraggableExerciseCard';
 import SessionNotes from '@/components/workout/SessionNotes';
 import WorkoutDuration from '@/components/workout/WorkoutDuration';
+import { MindsetTracker } from '@/components/MindsetTracker';
+import { ProFeatureOverlay, useProAccess } from '@/components/ProFeatureOverlay';
 
 interface Exercise {
   id: string;
@@ -66,12 +68,14 @@ export default function LogWorkout() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { hasProAccess } = useProAccess();
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [bodyParts, setBodyParts] = useState<BodyPart[]>([]);
   const [workoutExercises, setWorkoutExercises] = useState<WorkoutExercise[]>([]);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [notes, setNotes] = useState('');
   const [perceivedExertion, setPerceivedExertion] = useState<number>(5);
+  const [mindset, setMindset] = useState<number>(2);
   const [loading, setLoading] = useState(false);
   
   // New state for workout details
@@ -180,7 +184,15 @@ export default function LogWorkout() {
   const addSet = (exerciseIndex: number) => {
     const updatedExercises = [...workoutExercises];
     const exercise = updatedExercises[exerciseIndex];
-    const newSet = createEmptySet(exercise.sets.length);
+    
+    // Auto-duplicate previous set values if available
+    const previousSet = exercise.sets[exercise.sets.length - 1];
+    const newSet = previousSet ? {
+      ...previousSet,
+      set_index: exercise.sets.length + 1,
+      id: undefined // Remove ID so it creates a new set
+    } : createEmptySet(exercise.sets.length);
+    
     exercise.sets.push(newSet);
     setWorkoutExercises(updatedExercises);
   };
@@ -254,6 +266,7 @@ export default function LogWorkout() {
           end_time: new Date().toTimeString().split(' ')[0],
           date: workoutDate.toISOString().split('T')[0],
           duration_min: workoutDuration || null,
+          tags: [mindset.toString()], // Store mindset in tags for now
         })
         .eq('id', sessionId);
 
@@ -309,6 +322,7 @@ export default function LogWorkout() {
       setWorkoutExercises([]);
       setNotes('');
       setPerceivedExertion(5);
+      setMindset(2);
       setWorkoutDate(new Date());
       setWorkoutType('');
       setSelectedBodyParts([]);
@@ -330,7 +344,7 @@ export default function LogWorkout() {
     <div className="space-y-8">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-4xl font-bold tracking-tight">Log Workout</h1>
+          <h1 className="text-4xl font-bold tracking-tight">Add Workout</h1>
           <p className="text-muted-foreground text-lg">Track your training session</p>
         </div>
         <Button 
@@ -343,6 +357,37 @@ export default function LogWorkout() {
           {loading ? 'Saving...' : 'Save Workout'}
         </Button>
       </div>
+
+      {/* Generate Workout Button at Top */}
+      <Card className="p-4 bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="rounded-full bg-primary/10 p-2">
+              <Dumbbell className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <h3 className="font-semibold">Need workout ideas?</h3>
+              <p className="text-sm text-muted-foreground">Let AI create a personalized workout for you</p>
+            </div>
+          </div>
+          {hasProAccess ? (
+            <Button onClick={() => navigate('/generate')} variant="outline">
+              <Dumbbell className="mr-2 h-4 w-4" />
+              Generate Workout
+            </Button>
+          ) : (
+            <div className="relative">
+              <Button onClick={() => navigate('/upgrade')} variant="outline" className="relative">
+                <Dumbbell className="mr-2 h-4 w-4" />
+                Generate Workout
+                <div className="absolute -top-1 -right-1 bg-primary text-white text-xs px-1 rounded-full">
+                  Pro
+                </div>
+              </Button>
+            </div>
+          )}
+        </div>
+      </Card>
 
       {/* Workout Header with Date, Type, and Body Parts */}
       <WorkoutHeader
@@ -413,6 +458,12 @@ export default function LogWorkout() {
       <WorkoutDuration
         duration={workoutDuration}
         onDurationChange={setWorkoutDuration}
+      />
+
+      {/* Mindset Tracker */}
+      <MindsetTracker
+        mindset={mindset}
+        onMindsetChange={setMindset}
       />
 
       {/* Session Notes */}
