@@ -504,6 +504,67 @@ export default function MarketingHome() {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      <section className="py-24 bg-muted/30">
+        <div className="container">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold tracking-tight mb-4">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Quick answers to help you get started
+            </p>
+          </div>
+
+          <div className="max-w-4xl mx-auto space-y-8">
+            {/* FAQ 1 */}
+            <div className="bg-background rounded-lg p-8 shadow-sm">
+              <h3 className="text-xl font-semibold mb-4">What's included in the Free plan?</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Free users can log workouts, track weight, and see the last 2 days of history. 
+                This lets you try the core features before upgrading.
+              </p>
+            </div>
+
+            {/* FAQ 2 */}
+            <div className="bg-background rounded-lg p-8 shadow-sm">
+              <h3 className="text-xl font-semibold mb-4">What extra features come with Pro?</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Pro unlocks unlimited history, AI-generated workouts, daily AI summaries, 
+                exports to Google Sheets, and advanced charts to give you deeper insight into your progress.
+              </p>
+            </div>
+
+            {/* FAQ 3 */}
+            <div className="bg-background rounded-lg p-8 shadow-sm">
+              <h3 className="text-xl font-semibold mb-4">Do I need to be a serious athlete to use the app?</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                Not at all! No Days Lost is built for everyday people who want to build consistency, 
+                track progress, and make workouts easier—whether you're new to the gym or experienced.
+              </p>
+            </div>
+          </div>
+
+          {/* CTA Block */}
+          <div className="max-w-2xl mx-auto mt-16 text-center">
+            <div className="bg-background rounded-lg p-8 shadow-sm">
+              <p className="text-lg text-muted-foreground mb-6">
+                Still have questions? Contact us at{' '}
+                <a 
+                  href="mailto:support@nodayslost.app" 
+                  className="text-primary font-medium hover:underline"
+                >
+                  support@nodayslost.app
+                </a>
+              </p>
+              <Button size="lg" asChild>
+                <Link to="/auth">Sign Up Free</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="border-t bg-muted/30">
         <div className="container py-12">
@@ -531,7 +592,8 @@ export default function MarketingHome() {
               <h4 className="font-semibold">Company</h4>
               <nav className="flex flex-col space-y-2 text-sm text-muted-foreground">
                 <a href="#about" className="hover:text-primary transition-colors">About</a>
-                <a href="mailto:support@nodayslost.com" className="hover:text-primary transition-colors">Support</a>
+                <Link to="/faq" className="hover:text-primary transition-colors">FAQ</Link>
+                <a href="mailto:support@nodayslost.app" className="hover:text-primary transition-colors">Support</a>
               </nav>
             </div>
             
