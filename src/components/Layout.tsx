@@ -46,7 +46,7 @@ interface LayoutProps {
 }
 
 const getNavigation = (isAdmin: boolean) => [
-  { title: 'Dashboard', href: '/', icon: Home },
+  { title: 'Dashboard', href: '/dashboard', icon: Home },
   { title: 'Add Workout', href: '/log', icon: Plus },
   { title: 'Generate', href: '/generate', icon: Wand2 },
   { title: 'History', href: '/history', icon: History },

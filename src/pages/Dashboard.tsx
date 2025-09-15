@@ -10,7 +10,7 @@ import WeightTracker from '@/components/WeightTracker';
 import { StreakCounter } from '@/components/StreakCounter';
 import { ProFeatureOverlay, useProAccess } from '@/components/ProFeatureOverlay';
 
-const Index = () => {
+const Dashboard = () => {
   const { user, loading } = useAuth();
   const { hasProAccess, loading: proLoading } = useProAccess();
   const responsiveText = useResponsiveText();
@@ -30,7 +30,7 @@ const Index = () => {
   }
 
   if (!user) {
-    return <Navigate to="/auth" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return (
@@ -257,4 +257,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Dashboard;
