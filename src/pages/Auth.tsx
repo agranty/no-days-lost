@@ -18,7 +18,7 @@ export default function Auth() {
   const [resetMode, setResetMode] = useState(false);
 
   if (user) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   const handleSignIn = async (e: React.FormEvent) => {
