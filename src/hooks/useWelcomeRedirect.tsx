@@ -9,7 +9,7 @@ export function useWelcomeRedirect() {
   const location = useLocation();
 
   useEffect(() => {
-    if (!user || location.pathname === '/welcome' || location.pathname === '/auth') {
+    if (!user || location.pathname === '/welcome' || location.pathname === '/auth' || location.pathname === '/') {
       return;
     }
 
@@ -42,8 +42,8 @@ export function useWelcomeRedirect() {
 
       // If user hasn't seen welcome today, redirect to welcome page
       if (!lastWelcomeSeen || lastWelcomeSeen < today) {
-        // Only redirect from dashboard, not from specific pages
-        if (location.pathname === '/') {
+        // Only redirect from dashboard, not from the marketing homepage
+        if (location.pathname === '/dashboard') {
           navigate('/welcome');
         }
       }
