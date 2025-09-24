@@ -89,22 +89,11 @@ function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="flex items-center space-x-2 px-2">
-            <Link to="/welcome" className="flex items-center">
-              {state === "expanded" ? (
-                <img 
-                  src="/lovable-uploads/810109da-95f8-4bd2-8e44-0c79a9cfa2a2.png" 
-                  alt="No Days Lost" 
-                  className="h-8 w-auto object-contain hover:opacity-80 transition-opacity cursor-pointer"
-                />
-              ) : (
-                <img 
-                  src="/lovable-uploads/8e77a1a0-58bb-45aa-9fc9-d0297bffb73f.png" 
-                  alt="No Days Lost" 
-                  className="h-6 w-6 object-contain hover:opacity-80 transition-opacity cursor-pointer"
-                />
-              )}
-            </Link>
+          <SidebarGroupLabel className="px-2">
+            <a href="/welcome" className="flex items-center gap-2">
+              <img src="/logo-icon.svg" alt="" className="h-6 w-6" aria-hidden="true" />
+              <img src="/logo-full.svg" alt="No Days Lost" className="h-6 w-auto hidden md:block" />
+            </a>
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>

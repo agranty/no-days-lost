@@ -88,13 +88,10 @@ export default function Auth() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted/10 p-4">
         <Card className="w-full max-w-lg shadow-lg border-0 bg-card/95 backdrop-blur-sm">
           <CardHeader className="text-center space-y-6 pb-8">
-            <div className="flex justify-center">
-              <img 
-                src="/lovable-uploads/810109da-95f8-4bd2-8e44-0c79a9cfa2a2.png" 
-                alt="No Days Lost" 
-                className="h-16 w-auto object-contain"
-              />
-            </div>
+            <a href="/" className="inline-flex items-center gap-3" aria-label="No Days Lost">
+              <img src="/logo-icon.svg" alt="" className="h-8 w-8" aria-hidden="true" />
+              <img src="/logo-full.svg" alt="No Days Lost" className="h-8 w-auto hidden sm:block" />
+            </a>
             <div>
               <CardTitle className="text-3xl font-bold">Reset Password</CardTitle>
               <CardDescription className="text-base mt-2">Enter your email to receive a reset link</CardDescription>
@@ -136,13 +133,10 @@ export default function Auth() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted/10 p-4">
       <Card className="w-full max-w-lg shadow-lg border-0 bg-card/95 backdrop-blur-sm">
         <CardHeader className="text-center space-y-6 pb-8">
-          <div className="flex justify-center">
-            <img 
-              src="/lovable-uploads/810109da-95f8-4bd2-8e44-0c79a9cfa2a2.png" 
-              alt="No Days Lost" 
-              className="h-32 w-auto object-contain"
-            />
-          </div>
+          <a href="/" className="inline-flex items-center gap-3" aria-label="No Days Lost">
+            <img src="/logo-icon.svg" alt="" className="h-8 w-8" aria-hidden="true" />
+            <img src="/logo-full.svg" alt="No Days Lost" className="h-8 w-auto hidden sm:block" />
+          </a>
           <div>
             <CardDescription className="text-lg mt-2">Consistency Creates Progress</CardDescription>
           </div>
