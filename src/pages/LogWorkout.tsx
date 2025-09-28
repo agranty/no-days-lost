@@ -65,7 +65,6 @@ interface WorkoutExercise {
   sort_index: number;
   sets: WorkoutSet[];
 }
-
 export default function LogWorkout() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -79,6 +78,9 @@ export default function LogWorkout() {
   const [perceivedExertion, setPerceivedExertion] = useState<number>(5);
   const [mindset, setMindset] = useState<number>(2);
   const [loading, setLoading] = useState(false);
+  const [previousWorkouts, setPreviousWorkouts] = useState<any[]>([]);
+  const [showDuplicateModal, setShowDuplicateModal] = useState(false);
+  const createNewSession = async () => const [loadingPrevious, setLoadingPrevious] = useState(false);
   
   // New state for workout details
   const [workoutDate, setWorkoutDate] = useState<Date>(new Date());
