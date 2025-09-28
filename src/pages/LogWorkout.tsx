@@ -78,6 +78,7 @@ export default function LogWorkout() {
   const [perceivedExertion, setPerceivedExertion] = useState<number>(5);
   const [mindset, setMindset] = useState<number>(2);
   const [loading, setLoading] = useState(false);
+  
   const [previousWorkouts, setPreviousWorkouts] = useState<any[]>([]);
   const [showDuplicateModal, setShowDuplicateModal] = useState(false);
   const createNewSession = async () => const [loadingPrevious, setLoadingPrevious] = useState(false);
